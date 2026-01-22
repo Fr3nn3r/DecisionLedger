@@ -8,7 +8,9 @@ const colorThemes = [
   { id: 'pink', label: 'Pink' },
 ];
 
-const modes = [
+type ThemeMode = 'light' | 'dark' | 'system';
+
+const modes: Array<{ id: ThemeMode; label: string; icon: typeof Sun }> = [
   { id: 'light', label: 'Light', icon: Sun },
   { id: 'dark', label: 'Dark', icon: Moon },
   { id: 'system', label: 'System', icon: Monitor },
@@ -29,7 +31,7 @@ export function ThemePopover() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleModeChange = (mode: string, e: React.MouseEvent) => {
+  const handleModeChange = (mode: ThemeMode, e: React.MouseEvent<HTMLButtonElement>) => {
     switchThemeFromElement(mode, e.currentTarget);
     setIsOpen(false);
   };

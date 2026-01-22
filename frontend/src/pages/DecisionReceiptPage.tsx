@@ -27,7 +27,8 @@ export function DecisionReceiptPage() {
     return () => clearTimeout(timer);
   }, [runId, getDecisionRun]);
 
-  const claim = decisionRun ? getClaimById(decisionRun.claim_id) : undefined;
+  const _claim = decisionRun ? getClaimById(decisionRun.claim_id) : undefined;
+  void _claim; // Reserved for future use
 
   if (isLoading) {
     return <DecisionReceiptSkeleton />;

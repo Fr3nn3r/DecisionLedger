@@ -9,7 +9,7 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { LabeledValue } from '@/components/shared/LabeledValue';
 import { FactStatusBadge, OutcomeBadge } from '@/components/shared/badges';
 import { formatDate, formatCHF, cn } from '@/lib/utils';
-import type { Fact, Evidence, LineItem, DecisionStatus, Claim } from '@/types';
+import type { Fact, Evidence, LineItem, Claim } from '@/types';
 
 type SortDirection = 'asc' | 'desc';
 

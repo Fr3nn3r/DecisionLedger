@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { FileText, CheckCircle, Circle, ArrowLeft, Send, Plus } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import { qaProposedChanges, qaCohorts, getQAStudyResult } from '@/data';
+import { qaProposedChanges, getQAStudyResult } from '@/data';
 import { formatCHF, cn } from '@/lib/utils';
 import type { ProposalType, QAStudyResult, QAProposedChange } from '@/types';
 
@@ -95,7 +95,8 @@ export function NewProposalPage() {
 
   // QA pre-fill data
   const [qaResult, setQaResult] = useState<QAStudyResult | null>(null);
-  const [qaProposal, setQaProposal] = useState<QAProposedChange | null>(null);
+  const [_qaProposal, setQaProposal] = useState<QAProposedChange | null>(null);
+  void _qaProposal; // Reserved for future use
 
   // Pre-fill from QA Impact if query params present
   useEffect(() => {

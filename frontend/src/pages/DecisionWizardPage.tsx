@@ -13,13 +13,13 @@ import { useApp } from '@/context/AppContext';
 import { formatDate, cn, formatCHF } from '@/lib/utils';
 import { runDecision } from '@/services/decisionEngine';
 import type {
-  Claim,
   InterpretationSet,
   AssumptionSet,
   Assumption,
   ResolvedAssumption,
   SelectedInterpretation,
   DecisionRun,
+  Role,
 } from '@/types';
 
 const WIZARD_STEPS: WizardStep[] = [
@@ -242,7 +242,6 @@ export function DecisionWizardPage() {
       <div className="rounded-lg border border-border bg-card p-6">
         {currentStep === 0 && (
           <SetupStep
-            claim={claim}
             interpretationSet={interpretationSet}
             assumptionSet={assumptionSet}
             triggeredAssumptions={triggeredAssumptions}
@@ -307,7 +306,6 @@ interface PublishedVersionInfo {
 }
 
 interface SetupStepProps {
-  claim: Claim;
   interpretationSet: InterpretationSet;
   assumptionSet: AssumptionSet;
   triggeredAssumptions: Assumption[];
@@ -315,7 +313,6 @@ interface SetupStepProps {
 }
 
 function SetupStep({
-  claim,
   interpretationSet,
   assumptionSet,
   triggeredAssumptions,
@@ -444,7 +441,7 @@ function SetupStep({
 interface ResolveAssumptionsStepProps {
   triggeredAssumptions: Assumption[];
   resolutions: Map<string, AssumptionResolution>;
-  currentRole: string;
+  currentRole: Role;
   onUpdateResolution: (assumptionId: string, alternativeId: string, reason?: string) => void;
 }
 

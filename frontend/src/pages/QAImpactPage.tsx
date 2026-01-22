@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { qaCohorts, qaProposedChanges, getQAStudyResult } from '@/data';
 import { formatCHF, cn } from '@/lib/utils';
-import type { QACohort, QAProposedChange, QAStudyResult, QAFlag, ImpactedClaim } from '@/types';
+import type { QAStudyResult, QAFlag, ImpactedClaim } from '@/types';
 
 function DeltaBadge({ delta, size = 'default' }: { delta: number; size?: 'default' | 'large' }) {
   const baseClasses = size === 'large' ? 'text-2xl font-bold' : 'text-sm font-medium';

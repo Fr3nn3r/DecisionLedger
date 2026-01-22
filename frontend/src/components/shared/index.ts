@@ -39,7 +39,8 @@ export {
   ProposalDetailSkeleton,
   DecisionReceiptSkeleton,
 } from './Skeleton';
-export { Toast, ToastProvider, useToast } from './Toast';
+export { ToastProvider, useToast } from './Toast';
+export type { Toast } from './Toast';
 
 // Badge components (re-export from badges submodule)
 export {

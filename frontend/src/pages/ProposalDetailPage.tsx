@@ -14,7 +14,7 @@ import { useApp } from '@/context/AppContext';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { ProposalDetailSkeleton } from '@/components/shared/Skeleton';
 import { useToast } from '@/components/shared/Toast';
-import { getProposalById, qaCohorts } from '@/data';
+import { getProposalById } from '@/data';
 import { formatDate, formatCHF, cn } from '@/lib/utils';
 import type { ApprovalStep, ProposalStatus, Role, ChangeProposal } from '@/types';
 
@@ -114,9 +114,10 @@ function ApprovalStepIndicator({ step, index }: { step: ApprovalStep; index: num
 }
 
 function canSubmitForApproval(
-  currentRole: Role,
+  _currentRole: Role,
   proposal: ReturnType<typeof getProposalById>
 ): boolean {
+  void _currentRole; // Reserved for future role-based validation
   if (!proposal) return false;
   if (proposal.status !== 'Draft') return false;
   // Any role can submit a draft proposal for approval
@@ -146,8 +147,10 @@ function canPublish(currentRole: Role, proposal: ReturnType<typeof getProposalBy
 
 export function ProposalDetailPage() {
   const { proposalId } = useParams<{ proposalId: string }>();
-  const navigate = useNavigate();
-  const { currentRole, publishVersion, publishedVersion } = useApp();
+  const _navigate = useNavigate();
+  const { currentRole, publishVersion, publishedVersion: _publishedVersion } = useApp();
+  void _navigate; // Reserved for future navigation
+  void _publishedVersion; // Reserved for future display
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [proposal, setProposal] = useState<ChangeProposal | undefined>(undefined);

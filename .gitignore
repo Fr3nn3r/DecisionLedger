@@ -72,3 +72,6 @@ backend/.env
 scratch/
 *.tmp
 *.temp
+
+.vercel
+.env*.local

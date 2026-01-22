@@ -3,7 +3,6 @@ import {
   generateRunId,
   runDecision,
   type DecisionEngineInput,
-  type DecisionEngineOutput,
 } from '../decisionEngine';
 import type { Claim, InterpretationSet, AssumptionSet } from '@/types';
 
