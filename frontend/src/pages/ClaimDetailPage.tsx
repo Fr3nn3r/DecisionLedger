@@ -207,12 +207,31 @@ export function ClaimDetailPage() {
             {claim.jurisdiction} · {claim.product_line}
           </p>
         </div>
-        <Link
-          to={`/claims/${claim.claim_id}/decide`}
-          className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-        >
-          Run Decision
-        </Link>
+        <div className="flex items-center gap-2">
+          {previousRuns.length > 0 ? (
+            <>
+              <Link
+                to={`/decision-runs/${previousRuns[0].run_id}`}
+                className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              >
+                View Latest Receipt
+              </Link>
+              <Link
+                to={`/claims/${claim.claim_id}/decide`}
+                className="inline-flex items-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+              >
+                Run New Decision
+              </Link>
+            </>
+          ) : (
+            <Link
+              to={`/claims/${claim.claim_id}/decide`}
+              className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Run Decision
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Claim Info Card */}

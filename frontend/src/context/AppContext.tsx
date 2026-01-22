@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type { DecisionRun, Role, ProposalType } from '@/types';
+import { fixtureDecisionRuns } from '@/data';
 
 // Represents a published version override
 interface PublishedVersion {
@@ -36,7 +37,7 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   const [currentRole, setCurrentRole] = useState<Role>('Adjuster');
-  const [decisionRuns, setDecisionRuns] = useState<DecisionRun[]>([]);
+  const [decisionRuns, setDecisionRuns] = useState<DecisionRun[]>(fixtureDecisionRuns);
   const [publishedVersion, setPublishedVersion] = useState<PublishedVersion | null>(null);
 
   const addDecisionRun = useCallback((run: DecisionRun) => {
@@ -70,7 +71,7 @@ export function AppProvider({ children }: AppProviderProps) {
   );
 
   const resetDemoData = useCallback(() => {
-    setDecisionRuns([]);
+    setDecisionRuns(fixtureDecisionRuns);
     setCurrentRole('Adjuster');
     setPublishedVersion(null);
   }, []);

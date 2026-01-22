@@ -7,6 +7,7 @@ import type {
   QAProposedChange,
   QAStudyResult,
   ChangeProposal,
+  DecisionRun,
 } from '@/types';
 
 import claimsData from './claims.json';
@@ -14,10 +15,12 @@ import interpretationSetsData from './interpretation_sets.json';
 import assumptionSetsData from './assumption_sets.json';
 import qaResultsData from './qa_results.json';
 import proposalsData from './proposals.json';
+import decisionRunsData from './decision_runs.json';
 
 // Type assertions for JSON imports
 export const claims: Claim[] = claimsData as Claim[];
 export const interpretationSets: InterpretationSet[] = interpretationSetsData as InterpretationSet[];
+export const fixtureDecisionRuns: DecisionRun[] = decisionRunsData as DecisionRun[];
 export const assumptionSets: AssumptionSet[] = assumptionSetsData as AssumptionSet[];
 export const proposals: ChangeProposal[] = proposalsData as ChangeProposal[];
 
