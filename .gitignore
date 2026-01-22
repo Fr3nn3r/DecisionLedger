@@ -55,6 +55,7 @@ test-results/
 
 # Runtime data
 data/
+!frontend/src/data/
 *.log
 *.pid
 

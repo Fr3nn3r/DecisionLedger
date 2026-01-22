@@ -1,0 +1,170 @@
+[
+  {
+    "assumption_set_id": "ASM-CH-MOTOR-2025.1",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "version": "2025.1",
+    "status": "Approved",
+    "assumptions": [
+      {
+        "assumption_id": "ASM.ACCESSORY_DECLARED",
+        "label": "Accessory Declaration Status",
+        "trigger": "FACT.ACCESSORY_DECLARED is UNKNOWN",
+        "trigger_fact_id": "FACT.ACCESSORY_DECLARED",
+        "description": "When the policy document does not clearly indicate whether aftermarket accessories were declared, this assumption determines the default treatment",
+        "recommended_resolution": "NOT_DECLARED",
+        "alternatives": [
+          {
+            "alternative_id": "NOT_DECLARED",
+            "label": "Assume Not Declared",
+            "description": "Treat accessory as not declared on policy - conservative approach that excludes accessory from coverage",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "DECLARED",
+            "label": "Assume Declared",
+            "description": "Treat accessory as declared on policy - customer-favorable approach that includes accessory in coverage",
+            "allowed_roles": ["Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "Medium"
+      },
+      {
+        "assumption_id": "ASM.DRIVER_IDENTITY",
+        "label": "Driver Identity Confirmation",
+        "trigger": "FACT.DRIVER_CONFIRMED is UNKNOWN",
+        "trigger_fact_id": "FACT.DRIVER_CONFIRMED",
+        "description": "When the identity of the driver at the time of incident cannot be confirmed from available documentation",
+        "recommended_resolution": "POLICYHOLDER_DRIVING",
+        "alternatives": [
+          {
+            "alternative_id": "POLICYHOLDER_DRIVING",
+            "label": "Assume Policyholder Was Driving",
+            "description": "Assume the policyholder was the driver at the time of the incident",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "AUTHORIZED_DRIVER",
+            "label": "Assume Authorized Driver",
+            "description": "Assume an authorized driver listed on the policy was driving",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "REQUIRE_CONFIRMATION",
+            "label": "Require Confirmation",
+            "description": "Request additional documentation to confirm driver identity before proceeding",
+            "allowed_roles": ["Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "High"
+      },
+      {
+        "assumption_id": "ASM.REPAIR_QUALITY",
+        "label": "Repair Quality Standard",
+        "trigger": "FACT.REPAIR_STANDARD is UNKNOWN",
+        "trigger_fact_id": "FACT.REPAIR_STANDARD",
+        "description": "When the claim does not specify the expected repair quality standard",
+        "recommended_resolution": "OEM_PARTS",
+        "alternatives": [
+          {
+            "alternative_id": "OEM_PARTS",
+            "label": "Assume OEM Parts Required",
+            "description": "Use original equipment manufacturer parts for repairs",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "EQUIVALENT_PARTS",
+            "label": "Allow Equivalent Parts",
+            "description": "Allow use of equivalent quality aftermarket parts",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "Low"
+      }
+    ]
+  },
+  {
+    "assumption_set_id": "ASM-CH-MOTOR-2025.2",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "version": "2025.2",
+    "status": "Draft",
+    "assumptions": [
+      {
+        "assumption_id": "ASM.ACCESSORY_DECLARED",
+        "label": "Accessory Declaration Status",
+        "trigger": "FACT.ACCESSORY_DECLARED is UNKNOWN",
+        "trigger_fact_id": "FACT.ACCESSORY_DECLARED",
+        "description": "When the policy document does not clearly indicate whether aftermarket accessories were declared, this assumption determines the default treatment",
+        "recommended_resolution": "DECLARED",
+        "alternatives": [
+          {
+            "alternative_id": "NOT_DECLARED",
+            "label": "Assume Not Declared",
+            "description": "Treat accessory as not declared on policy - conservative approach that excludes accessory from coverage",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "DECLARED",
+            "label": "Assume Declared",
+            "description": "Treat accessory as declared on policy - customer-favorable approach that includes accessory in coverage",
+            "allowed_roles": ["Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "Medium"
+      },
+      {
+        "assumption_id": "ASM.DRIVER_IDENTITY",
+        "label": "Driver Identity Confirmation",
+        "trigger": "FACT.DRIVER_CONFIRMED is UNKNOWN",
+        "trigger_fact_id": "FACT.DRIVER_CONFIRMED",
+        "description": "When the identity of the driver at the time of incident cannot be confirmed from available documentation",
+        "recommended_resolution": "POLICYHOLDER_DRIVING",
+        "alternatives": [
+          {
+            "alternative_id": "POLICYHOLDER_DRIVING",
+            "label": "Assume Policyholder Was Driving",
+            "description": "Assume the policyholder was the driver at the time of the incident",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "AUTHORIZED_DRIVER",
+            "label": "Assume Authorized Driver",
+            "description": "Assume an authorized driver listed on the policy was driving",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "REQUIRE_CONFIRMATION",
+            "label": "Require Confirmation",
+            "description": "Request additional documentation to confirm driver identity before proceeding",
+            "allowed_roles": ["Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "High"
+      },
+      {
+        "assumption_id": "ASM.REPAIR_QUALITY",
+        "label": "Repair Quality Standard",
+        "trigger": "FACT.REPAIR_STANDARD is UNKNOWN",
+        "trigger_fact_id": "FACT.REPAIR_STANDARD",
+        "description": "When the claim does not specify the expected repair quality standard",
+        "recommended_resolution": "OEM_PARTS",
+        "alternatives": [
+          {
+            "alternative_id": "OEM_PARTS",
+            "label": "Assume OEM Parts Required",
+            "description": "Use original equipment manufacturer parts for repairs",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          },
+          {
+            "alternative_id": "EQUIVALENT_PARTS",
+            "label": "Allow Equivalent Parts",
+            "description": "Allow use of equivalent quality aftermarket parts",
+            "allowed_roles": ["Adjuster", "Supervisor", "QA Lead", "Policy Owner"]
+          }
+        ],
+        "risk_tier": "Low"
+      }
+    ]
+  }
+]

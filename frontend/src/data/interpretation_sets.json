@@ -1,0 +1,162 @@
+[
+  {
+    "interpretation_set_id": "INT-CH-MOTOR-2025.1",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "effective_from": "2025-01-01",
+    "version": "2025.1",
+    "status": "Approved",
+    "decision_points": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "label": "Accessory Coverage Policy",
+        "description": "Determines how aftermarket accessories are treated in coverage decisions",
+        "options": [
+          {
+            "option_id": "INCLUDED_IF_DECLARED",
+            "label": "Included If Declared",
+            "description": "Cover accessories only if explicitly declared on the policy at inception or renewal"
+          },
+          {
+            "option_id": "INCLUDED_BY_DEFAULT",
+            "label": "Included By Default",
+            "description": "Always cover aftermarket accessories regardless of declaration status"
+          },
+          {
+            "option_id": "EXCLUDED",
+            "label": "Excluded",
+            "description": "Never cover aftermarket accessories under the base policy"
+          }
+        ],
+        "default_option": "INCLUDED_IF_DECLARED",
+        "owner": "Policy Owner",
+        "status": "Approved"
+      },
+      {
+        "decision_point_id": "DP.DEDUCTIBLE_WAIVER",
+        "label": "Deductible Waiver Eligibility",
+        "description": "Determines when the standard deductible may be waived",
+        "options": [
+          {
+            "option_id": "NEVER_WAIVE",
+            "label": "Never Waive",
+            "description": "Standard deductible always applies regardless of circumstances"
+          },
+          {
+            "option_id": "WAIVE_IF_NOT_AT_FAULT",
+            "label": "Waive If Not At Fault",
+            "description": "Waive deductible when the insured is not at fault for the incident"
+          },
+          {
+            "option_id": "WAIVE_FIRST_CLAIM",
+            "label": "Waive First Claim",
+            "description": "Waive deductible for the first claim in the policy period"
+          }
+        ],
+        "default_option": "NEVER_WAIVE",
+        "owner": "Policy Owner",
+        "status": "Approved"
+      },
+      {
+        "decision_point_id": "DP.TOTAL_LOSS_THRESHOLD",
+        "label": "Total Loss Determination",
+        "description": "Threshold for declaring a vehicle a total loss",
+        "options": [
+          {
+            "option_id": "REPAIR_EXCEEDS_70_PERCENT",
+            "label": "Repair Exceeds 70%",
+            "description": "Declare total loss when repair cost exceeds 70% of vehicle value"
+          },
+          {
+            "option_id": "REPAIR_EXCEEDS_80_PERCENT",
+            "label": "Repair Exceeds 80%",
+            "description": "Declare total loss when repair cost exceeds 80% of vehicle value"
+          }
+        ],
+        "default_option": "REPAIR_EXCEEDS_70_PERCENT",
+        "owner": "Policy Owner",
+        "status": "Approved"
+      }
+    ]
+  },
+  {
+    "interpretation_set_id": "INT-CH-MOTOR-2025.2",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "effective_from": "2025-04-01",
+    "version": "2025.2",
+    "status": "Draft",
+    "decision_points": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "label": "Accessory Coverage Policy",
+        "description": "Determines how aftermarket accessories are treated in coverage decisions",
+        "options": [
+          {
+            "option_id": "INCLUDED_IF_DECLARED",
+            "label": "Included If Declared",
+            "description": "Cover accessories only if explicitly declared on the policy at inception or renewal"
+          },
+          {
+            "option_id": "INCLUDED_BY_DEFAULT",
+            "label": "Included By Default",
+            "description": "Always cover aftermarket accessories regardless of declaration status"
+          },
+          {
+            "option_id": "EXCLUDED",
+            "label": "Excluded",
+            "description": "Never cover aftermarket accessories under the base policy"
+          }
+        ],
+        "default_option": "INCLUDED_BY_DEFAULT",
+        "owner": "Policy Owner",
+        "status": "Draft"
+      },
+      {
+        "decision_point_id": "DP.DEDUCTIBLE_WAIVER",
+        "label": "Deductible Waiver Eligibility",
+        "description": "Determines when the standard deductible may be waived",
+        "options": [
+          {
+            "option_id": "NEVER_WAIVE",
+            "label": "Never Waive",
+            "description": "Standard deductible always applies regardless of circumstances"
+          },
+          {
+            "option_id": "WAIVE_IF_NOT_AT_FAULT",
+            "label": "Waive If Not At Fault",
+            "description": "Waive deductible when the insured is not at fault for the incident"
+          },
+          {
+            "option_id": "WAIVE_FIRST_CLAIM",
+            "label": "Waive First Claim",
+            "description": "Waive deductible for the first claim in the policy period"
+          }
+        ],
+        "default_option": "NEVER_WAIVE",
+        "owner": "Policy Owner",
+        "status": "Draft"
+      },
+      {
+        "decision_point_id": "DP.TOTAL_LOSS_THRESHOLD",
+        "label": "Total Loss Determination",
+        "description": "Threshold for declaring a vehicle a total loss",
+        "options": [
+          {
+            "option_id": "REPAIR_EXCEEDS_70_PERCENT",
+            "label": "Repair Exceeds 70%",
+            "description": "Declare total loss when repair cost exceeds 70% of vehicle value"
+          },
+          {
+            "option_id": "REPAIR_EXCEEDS_80_PERCENT",
+            "label": "Repair Exceeds 80%",
+            "description": "Declare total loss when repair cost exceeds 80% of vehicle value"
+          }
+        ],
+        "default_option": "REPAIR_EXCEEDS_70_PERCENT",
+        "owner": "Policy Owner",
+        "status": "Draft"
+      }
+    ]
+  }
+]

@@ -1,0 +1,180 @@
+[
+  {
+    "proposal_id": "PROP-2026-001",
+    "title": "Include Accessories by Default",
+    "proposal_type": "Interpretation",
+    "proposed_version": "2025.2",
+    "rationale": "Customer satisfaction analysis shows that accessory coverage disputes account for 23% of complaints. Changing to include-by-default would reduce friction and align with competitor offerings while only marginally increasing loss ratios.",
+    "qa_impact_summary": {
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "cohort_label": "CH Motor - Accessory Damage - Last 180 Days",
+      "impacted_claims_count": 2,
+      "total_delta_payout": 1200
+    },
+    "status": "Pending Approval",
+    "created_at": "2026-01-10T09:00:00Z",
+    "created_by": "QA Lead",
+    "approval_steps": [
+      {
+        "step_name": "Claims Ops Review",
+        "required_role": "Supervisor",
+        "status": "Completed",
+        "completed_at": "2026-01-12T14:30:00Z",
+        "completed_by": "Supervisor"
+      },
+      {
+        "step_name": "Legal Review",
+        "required_role": "Policy Owner",
+        "status": "Pending"
+      },
+      {
+        "step_name": "Final Approval",
+        "required_role": "Policy Owner",
+        "status": "Pending"
+      }
+    ]
+  },
+  {
+    "proposal_id": "PROP-2026-002",
+    "title": "Customer-Favorable Assumption for Unknown Accessories",
+    "proposal_type": "Assumption",
+    "proposed_version": "2025.2",
+    "rationale": "When accessory declaration status is unknown, the current conservative approach (assume not declared) creates customer friction. Propose changing the recommended assumption to favor the customer (assume declared) for improved NPS scores.",
+    "qa_impact_summary": {
+      "cohort_id": "COH-CH-MOTOR-UNKNOWN-ACCESSORY",
+      "cohort_label": "CH Motor - Unknown Accessory Status",
+      "impacted_claims_count": 1,
+      "total_delta_payout": 1200
+    },
+    "status": "Draft",
+    "created_at": "2026-01-18T11:00:00Z",
+    "created_by": "Adjuster",
+    "approval_steps": [
+      {
+        "step_name": "Claims Ops Review",
+        "required_role": "Supervisor",
+        "status": "Pending"
+      },
+      {
+        "step_name": "Legal Review",
+        "required_role": "Policy Owner",
+        "status": "Pending"
+      },
+      {
+        "step_name": "Final Approval",
+        "required_role": "Policy Owner",
+        "status": "Pending"
+      }
+    ]
+  },
+  {
+    "proposal_id": "PROP-2025-003",
+    "title": "Exclude All Aftermarket Accessories",
+    "proposal_type": "Interpretation",
+    "proposed_version": "2025.3",
+    "rationale": "Cost reduction initiative: removing accessory coverage from base policies would reduce loss ratios by approximately 3.2%. Accessories could be offered as a separate rider product.",
+    "qa_impact_summary": {
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "cohort_label": "CH Motor - Accessory Damage - Last 180 Days",
+      "impacted_claims_count": 4,
+      "total_delta_payout": -2750
+    },
+    "status": "Rejected",
+    "created_at": "2025-11-05T10:00:00Z",
+    "created_by": "Policy Owner",
+    "approved_at": null,
+    "approved_by": null,
+    "approval_steps": [
+      {
+        "step_name": "Claims Ops Review",
+        "required_role": "Supervisor",
+        "status": "Completed",
+        "completed_at": "2025-11-08T09:00:00Z",
+        "completed_by": "Supervisor"
+      },
+      {
+        "step_name": "Legal Review",
+        "required_role": "Policy Owner",
+        "status": "Rejected",
+        "completed_at": "2025-11-15T16:00:00Z",
+        "completed_by": "Policy Owner"
+      },
+      {
+        "step_name": "Final Approval",
+        "required_role": "Policy Owner",
+        "status": "Cancelled"
+      }
+    ]
+  },
+  {
+    "proposal_id": "PROP-2025-004",
+    "title": "Waive Deductible for Not-At-Fault Claims",
+    "proposal_type": "Interpretation",
+    "proposed_version": "2025.2",
+    "rationale": "Competitive analysis shows 60% of market leaders waive deductibles for not-at-fault claims. This change would improve customer retention and is offset by subrogation recoveries.",
+    "status": "Approved",
+    "created_at": "2025-09-20T08:00:00Z",
+    "created_by": "QA Lead",
+    "approved_at": "2025-10-15T14:00:00Z",
+    "approved_by": "Policy Owner",
+    "approval_steps": [
+      {
+        "step_name": "Claims Ops Review",
+        "required_role": "Supervisor",
+        "status": "Completed",
+        "completed_at": "2025-09-25T11:00:00Z",
+        "completed_by": "Supervisor"
+      },
+      {
+        "step_name": "Legal Review",
+        "required_role": "Policy Owner",
+        "status": "Completed",
+        "completed_at": "2025-10-10T09:00:00Z",
+        "completed_by": "Policy Owner"
+      },
+      {
+        "step_name": "Final Approval",
+        "required_role": "Policy Owner",
+        "status": "Completed",
+        "completed_at": "2025-10-15T14:00:00Z",
+        "completed_by": "Policy Owner"
+      }
+    ]
+  },
+  {
+    "proposal_id": "PROP-2025-005",
+    "title": "OEM Parts Default for Vehicles Under 3 Years",
+    "proposal_type": "Assumption",
+    "proposed_version": "2025.1",
+    "rationale": "When repair standard is unknown, assume OEM parts for newer vehicles (under 3 years) to maintain vehicle value and warranty compliance.",
+    "status": "Published",
+    "created_at": "2025-06-01T10:00:00Z",
+    "created_by": "Supervisor",
+    "approved_at": "2025-07-01T09:00:00Z",
+    "approved_by": "Policy Owner",
+    "published_at": "2025-07-15T00:00:00Z",
+    "approval_steps": [
+      {
+        "step_name": "Claims Ops Review",
+        "required_role": "Supervisor",
+        "status": "Completed",
+        "completed_at": "2025-06-10T14:00:00Z",
+        "completed_by": "Supervisor"
+      },
+      {
+        "step_name": "Legal Review",
+        "required_role": "Policy Owner",
+        "status": "Completed",
+        "completed_at": "2025-06-25T11:00:00Z",
+        "completed_by": "Policy Owner"
+      },
+      {
+        "step_name": "Final Approval",
+        "required_role": "Policy Owner",
+        "status": "Completed",
+        "completed_at": "2025-07-01T09:00:00Z",
+        "completed_by": "Policy Owner"
+      }
+    ]
+  }
+]

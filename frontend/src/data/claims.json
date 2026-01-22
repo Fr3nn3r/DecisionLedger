@@ -1,0 +1,738 @@
+[
+  {
+    "claim_id": "CLM-CH-001",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-12-15",
+    "policy_id": "POL-CH-2025-00142",
+    "status": "Ready",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Rear-end collision",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": null,
+        "status": "UNKNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-001",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-001/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-002",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-001/photos.zip"
+      },
+      {
+        "evidence_id": "EV-003",
+        "label": "Repair Estimate",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-001/repair-estimate.pdf"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-001",
+        "label": "Rear bumper repair",
+        "amount_chf": 2500,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-002",
+        "label": "Tow bar replacement",
+        "amount_chf": 1200,
+        "category": "accessory"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-002",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-11-28",
+    "policy_id": "POL-CH-2025-00089",
+    "status": "Decided",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Side collision",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-004",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-002/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-005",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-002/photos.zip"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-003",
+        "label": "Door panel replacement",
+        "amount_chf": 3200,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-004",
+        "label": "Side mirror replacement",
+        "amount_chf": 450,
+        "category": "repair"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-003",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-12-02",
+    "policy_id": "POL-CH-2025-00201",
+    "status": "Ready",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "SUV",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Parking damage",
+        "status": "KNOWN",
+        "source": "Owner Statement"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "Unknown",
+        "status": "KNOWN",
+        "source": "Owner Statement"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-006",
+        "label": "Owner Statement",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-003/statement.pdf"
+      },
+      {
+        "evidence_id": "EV-007",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-003/photos.zip"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-005",
+        "label": "Front fender repair",
+        "amount_chf": 1800,
+        "category": "repair"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-004",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-10-15",
+    "policy_id": "POL-CH-2025-00055",
+    "status": "Decided",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Total loss",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-008",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-004/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-009",
+        "label": "Vehicle Valuation",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-004/valuation.pdf"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-006",
+        "label": "Vehicle total loss payout",
+        "amount_chf": 15000,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-007",
+        "label": "Roof rack system",
+        "amount_chf": 800,
+        "category": "accessory"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-005",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-11-10",
+    "policy_id": "POL-CH-2025-00178",
+    "status": "Ready",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Van",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Rear-end collision",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-010",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-005/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-011",
+        "label": "Repair Estimate",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-005/repair-estimate.pdf"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-008",
+        "label": "Rear door repair",
+        "amount_chf": 2200,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-009",
+        "label": "Cargo organizer system",
+        "amount_chf": 650,
+        "category": "accessory"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-006",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-09-22",
+    "policy_id": "POL-CH-2025-00033",
+    "status": "Decided",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Windshield damage",
+        "status": "KNOWN",
+        "source": "Owner Statement"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Owner Statement"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-012",
+        "label": "Owner Statement",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-006/statement.pdf"
+      },
+      {
+        "evidence_id": "EV-013",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-006/photos.zip"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-010",
+        "label": "Windshield replacement",
+        "amount_chf": 850,
+        "category": "repair"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-007",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-12-08",
+    "policy_id": "POL-CH-2025-00225",
+    "status": "Ready",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Front collision",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-014",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-007/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-015",
+        "label": "Repair Estimate",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-007/repair-estimate.pdf"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-011",
+        "label": "Hood replacement",
+        "amount_chf": 2800,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-012",
+        "label": "Headlight assembly",
+        "amount_chf": 1100,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-013",
+        "label": "Radiator repair",
+        "amount_chf": 950,
+        "category": "repair"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-008",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-08-30",
+    "policy_id": "POL-CH-2025-00012",
+    "status": "Decided",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Motorcycle",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Single vehicle accident",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-016",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-008/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-017",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-008/photos.zip"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-014",
+        "label": "Fairing replacement",
+        "amount_chf": 1500,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-015",
+        "label": "Saddlebags",
+        "amount_chf": 400,
+        "category": "accessory"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-009",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-11-25",
+    "policy_id": "POL-CH-2025-00156",
+    "status": "Ready",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "Passenger Car",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Hail damage",
+        "status": "KNOWN",
+        "source": "Owner Statement"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Weather Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-018",
+        "label": "Weather Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-009/weather-report.pdf"
+      },
+      {
+        "evidence_id": "EV-019",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-009/photos.zip"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-016",
+        "label": "Paintless dent repair",
+        "amount_chf": 2100,
+        "category": "repair"
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-CH-010",
+    "jurisdiction": "CH",
+    "product_line": "Motor/Casco",
+    "loss_date": "2025-10-05",
+    "policy_id": "POL-CH-2025-00098",
+    "status": "Decided",
+    "facts": [
+      {
+        "fact_id": "FACT.VEHICLE_TYPE",
+        "label": "Vehicle Type",
+        "value": "SUV",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.COLLISION_TYPE",
+        "label": "Collision Type",
+        "value": "Theft recovery damage",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.DRIVER_AT_FAULT",
+        "label": "Driver At Fault",
+        "value": "No",
+        "status": "KNOWN",
+        "source": "Police Report"
+      },
+      {
+        "fact_id": "FACT.ACCESSORY_DECLARED",
+        "label": "Accessory Declared",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Policy Document"
+      },
+      {
+        "fact_id": "FACT.VALID_LICENSE",
+        "label": "Valid License",
+        "value": "Yes",
+        "status": "KNOWN",
+        "source": "Driver Records"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EV-020",
+        "label": "Police Report",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-010/police-report.pdf"
+      },
+      {
+        "evidence_id": "EV-021",
+        "label": "Damage Photos",
+        "type": "Image",
+        "url": "/evidence/CLM-CH-010/photos.zip"
+      },
+      {
+        "evidence_id": "EV-022",
+        "label": "Repair Estimate",
+        "type": "PDF",
+        "url": "/evidence/CLM-CH-010/repair-estimate.pdf"
+      }
+    ],
+    "line_items": [
+      {
+        "item_id": "LI-017",
+        "label": "Interior damage repair",
+        "amount_chf": 3500,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-018",
+        "label": "Steering column repair",
+        "amount_chf": 1200,
+        "category": "repair"
+      },
+      {
+        "item_id": "LI-019",
+        "label": "Premium audio system",
+        "amount_chf": 900,
+        "category": "accessory"
+      }
+    ]
+  }
+]

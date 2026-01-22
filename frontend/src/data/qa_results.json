@@ -1,0 +1,197 @@
+{
+  "cohorts": [
+    {
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "label": "CH Motor - Accessory Damage - Last 180 Days",
+      "description": "Swiss Motor/Casco claims with accessory line items, loss date within last 180 days",
+      "claim_count": 5
+    },
+    {
+      "cohort_id": "COH-CH-MOTOR-UNKNOWN-ACCESSORY",
+      "label": "CH Motor - Unknown Accessory Status",
+      "description": "Swiss Motor/Casco claims where accessory declaration status is unknown",
+      "claim_count": 1
+    },
+    {
+      "cohort_id": "COH-CH-MOTOR-ALL-180D",
+      "label": "CH Motor - All Claims - Last 180 Days",
+      "description": "All Swiss Motor/Casco claims with loss date within last 180 days",
+      "claim_count": 10
+    }
+  ],
+  "proposed_changes": [
+    {
+      "proposal_id": "PROP-INT-ACCESSORY-DEFAULT",
+      "label": "Accessory Coverage: Include By Default",
+      "description": "Change ACCESSORY_COVERAGE interpretation default from INCLUDED_IF_DECLARED to INCLUDED_BY_DEFAULT, covering all aftermarket accessories regardless of declaration status",
+      "change_type": "INTERPRETATION",
+      "target_set_id": "INT-CH-MOTOR-2025.2",
+      "target_item_id": "DP.ACCESSORY_COVERAGE",
+      "from_value": "INCLUDED_IF_DECLARED",
+      "to_value": "INCLUDED_BY_DEFAULT"
+    },
+    {
+      "proposal_id": "PROP-ASM-DECLARED-FAVORABLE",
+      "label": "Assumption: Favor Customer (Assume Declared)",
+      "description": "Change recommended assumption resolution for unknown accessory status from NOT_DECLARED to DECLARED, adopting a customer-favorable approach",
+      "change_type": "ASSUMPTION",
+      "target_set_id": "ASM-CH-MOTOR-2025.2",
+      "target_item_id": "ASM.ACCESSORY_DECLARED",
+      "from_value": "NOT_DECLARED",
+      "to_value": "DECLARED"
+    },
+    {
+      "proposal_id": "PROP-INT-ACCESSORY-EXCLUDED",
+      "label": "Accessory Coverage: Exclude All",
+      "description": "Change ACCESSORY_COVERAGE interpretation to EXCLUDED, removing all aftermarket accessory coverage from base policies",
+      "change_type": "INTERPRETATION",
+      "target_set_id": "INT-CH-MOTOR-2025.1",
+      "target_item_id": "DP.ACCESSORY_COVERAGE",
+      "from_value": "INCLUDED_IF_DECLARED",
+      "to_value": "EXCLUDED"
+    }
+  ],
+  "study_results": [
+    {
+      "study_id": "QA-2025-001",
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "cohort_label": "CH Motor - Accessory Damage - Last 180 Days",
+      "proposal_id": "PROP-INT-ACCESSORY-DEFAULT",
+      "proposal_label": "Accessory Coverage: Include By Default",
+      "impacted_claims_count": 2,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": [],
+      "summary": "Changing to INCLUDED_BY_DEFAULT would increase payouts by CHF 1,200. One claim (CLM-CH-001) with unknown accessory status would automatically receive accessory coverage for tow bar replacement, eliminating the need for assumption resolution.",
+      "run_date": "2026-01-15T10:30:00Z"
+    },
+    {
+      "study_id": "QA-2025-002",
+      "cohort_id": "COH-CH-MOTOR-UNKNOWN-ACCESSORY",
+      "cohort_label": "CH Motor - Unknown Accessory Status",
+      "proposal_id": "PROP-ASM-DECLARED-FAVORABLE",
+      "proposal_label": "Assumption: Favor Customer (Assume Declared)",
+      "impacted_claims_count": 1,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": ["INCONSISTENCY_DETECTED"],
+      "summary": "Changing recommended assumption to DECLARED would increase payouts by CHF 1,200 for claims with unknown accessory status. WARNING: This creates an inconsistency - the assumption favors coverage while the interpretation (INCLUDED_IF_DECLARED) still gates on declaration. Consider aligning both policies.",
+      "inconsistency_detail": "The proposed assumption change recommends treating accessories as declared, but the current interpretation (INCLUDED_IF_DECLARED) creates a logical dependency. If the goal is customer-favorable treatment, consider also changing the interpretation to INCLUDED_BY_DEFAULT for consistency.",
+      "run_date": "2026-01-18T14:15:00Z"
+    },
+    {
+      "study_id": "QA-2025-003",
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "cohort_label": "CH Motor - Accessory Damage - Last 180 Days",
+      "proposal_id": "PROP-INT-ACCESSORY-EXCLUDED",
+      "proposal_label": "Accessory Coverage: Exclude All",
+      "impacted_claims_count": 4,
+      "total_delta_payout": -2750,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-010", "delta": -900 },
+        { "claim_id": "CLM-CH-004", "delta": -800 },
+        { "claim_id": "CLM-CH-005", "delta": -650 },
+        { "claim_id": "CLM-CH-008", "delta": -400 }
+      ],
+      "flags": ["HIGH_IMPACT"],
+      "summary": "Changing to EXCLUDED would reduce payouts by CHF 2,750 across 4 claims. All claims with declared accessories would lose accessory coverage. This represents a significant policy change affecting customer expectations.",
+      "run_date": "2026-01-20T09:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-004",
+      "cohort_id": "COH-CH-MOTOR-ACCESSORY-180D",
+      "cohort_label": "CH Motor - Accessory Damage - Last 180 Days",
+      "proposal_id": "PROP-ASM-DECLARED-FAVORABLE",
+      "proposal_label": "Assumption: Favor Customer (Assume Declared)",
+      "impacted_claims_count": 1,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": [],
+      "summary": "Within accessory claims, only CLM-CH-001 has unknown declaration status. Changing the assumption to favor 'declared' would cover the CHF 1,200 tow bar. Other claims in this cohort already have known accessory status and are unaffected by assumption changes.",
+      "run_date": "2026-01-21T08:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-005",
+      "cohort_id": "COH-CH-MOTOR-UNKNOWN-ACCESSORY",
+      "cohort_label": "CH Motor - Unknown Accessory Status",
+      "proposal_id": "PROP-INT-ACCESSORY-DEFAULT",
+      "proposal_label": "Accessory Coverage: Include By Default",
+      "impacted_claims_count": 1,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": [],
+      "summary": "Changing interpretation to INCLUDED_BY_DEFAULT would automatically cover the CHF 1,200 tow bar for CLM-CH-001, bypassing the need for assumption resolution entirely. This is the cleanest solution for unknown accessory status claims.",
+      "run_date": "2026-01-21T09:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-006",
+      "cohort_id": "COH-CH-MOTOR-UNKNOWN-ACCESSORY",
+      "cohort_label": "CH Motor - Unknown Accessory Status",
+      "proposal_id": "PROP-INT-ACCESSORY-EXCLUDED",
+      "proposal_label": "Accessory Coverage: Exclude All",
+      "impacted_claims_count": 0,
+      "total_delta_payout": 0,
+      "top_impacted_claims": [],
+      "flags": [],
+      "summary": "No impact on unknown status claims. Under current policy (INCLUDED_IF_DECLARED), accessories with unknown declaration status are already not covered by default. Changing to EXCLUDED has no additional effect on these claims.",
+      "run_date": "2026-01-21T10:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-007",
+      "cohort_id": "COH-CH-MOTOR-ALL-180D",
+      "cohort_label": "CH Motor - All Claims - Last 180 Days",
+      "proposal_id": "PROP-INT-ACCESSORY-DEFAULT",
+      "proposal_label": "Accessory Coverage: Include By Default",
+      "impacted_claims_count": 2,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": [],
+      "summary": "Across all 10 claims, only those with undeclared or unknown accessories would gain coverage. CLM-CH-001 (unknown status, CHF 1,200 tow bar) would be covered. Most claims either have no accessories or already have declared accessories covered under current policy.",
+      "run_date": "2026-01-21T11:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-008",
+      "cohort_id": "COH-CH-MOTOR-ALL-180D",
+      "cohort_label": "CH Motor - All Claims - Last 180 Days",
+      "proposal_id": "PROP-ASM-DECLARED-FAVORABLE",
+      "proposal_label": "Assumption: Favor Customer (Assume Declared)",
+      "impacted_claims_count": 1,
+      "total_delta_payout": 1200,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-001", "delta": 1200 }
+      ],
+      "flags": ["INCONSISTENCY_DETECTED"],
+      "summary": "Across all 10 claims, only CLM-CH-001 has unknown accessory declaration status requiring an assumption. The customer-favorable assumption would add CHF 1,200 in coverage. Note: This creates a policy inconsistency - consider pairing with interpretation change.",
+      "inconsistency_detail": "Changing only the assumption creates an implicit dependency on interpretation logic. For a consistent customer-favorable approach across the portfolio, consider also changing the interpretation to INCLUDED_BY_DEFAULT.",
+      "run_date": "2026-01-21T12:00:00Z"
+    },
+    {
+      "study_id": "QA-2025-009",
+      "cohort_id": "COH-CH-MOTOR-ALL-180D",
+      "cohort_label": "CH Motor - All Claims - Last 180 Days",
+      "proposal_id": "PROP-INT-ACCESSORY-EXCLUDED",
+      "proposal_label": "Accessory Coverage: Exclude All",
+      "impacted_claims_count": 4,
+      "total_delta_payout": -2750,
+      "top_impacted_claims": [
+        { "claim_id": "CLM-CH-010", "delta": -900 },
+        { "claim_id": "CLM-CH-004", "delta": -800 },
+        { "claim_id": "CLM-CH-005", "delta": -650 },
+        { "claim_id": "CLM-CH-008", "delta": -400 }
+      ],
+      "flags": ["HIGH_IMPACT"],
+      "summary": "Excluding all accessories across the entire portfolio would reduce payouts by CHF 2,750. Four claims with declared accessories would lose coverage. This is the same impact as the accessory-specific cohort since only declared accessories are currently covered.",
+      "run_date": "2026-01-21T13:00:00Z"
+    }
+  ]
+}
