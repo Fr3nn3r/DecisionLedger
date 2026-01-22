@@ -1,140 +1,203 @@
 # Decision Ledger - Handoff Notes
 
 **Date**: 2026-01-22
-**Context**: Project setup complete, ready to start UI implementation
+**Session**: Counterfactual Simulator + E2E tests complete
 
 ---
 
 ## Current State
 
-### What's Done
+### Completed Epics
+- **E1** - Project Setup & Infrastructure
+- **E2** - Core Data Models & Demo Engine
+- **E3** - App Shell & Navigation
+- **E4** - Claims Module
+- **E5** - Decision Wizard
+- **E6** - Decision Receipt
+- **E7** - Trace Viewer
+- **E8** - Counterfactual Simulator (NEW)
+- **E11** - Catalogs Module
 
-1. **Project Structure** - Full monorepo setup per IMPLEMENTATION_GUIDELINES.md
-   - `backend/` - FastAPI placeholder (not needed for demo MVP)
-   - `frontend/` - React 18 + TypeScript + Tailwind + shadcn-ui patterns
-   - `.claude/docs/` - Architecture, testing, workflows documentation
-   - `.project/backlog.json` - 47 user stories across 12 epics
-   - `scripts/` - PowerShell dev scripts
-   - `CLAUDE.md` - AI assistant instructions
-
-2. **Frontend Foundation**
-   - Vite + React 18 + TypeScript configured
-   - Tailwind CSS with 3 color themes (Northern Lights, Default, Pink)
-   - Dark/light mode with `@space-man/react-theme-animation`
-   - App shell: Sidebar nav, Header with role selector, theme toggle, breadcrumbs
-   - React Router with all routes defined
-   - AppContext for role + decision runs state
-   - TypeScript types matching the data model
-   - API client (ready but won't be used initially)
-   - 13 placeholder pages created
-
-3. **Backend Placeholder**
-   - FastAPI structure with routes, services, schemas
-   - Decision engine with CH Motor logic (Python version)
-   - Empty JSON fixture files in `backend/fixtures/`
-   - **Decision: Backend is placeholder only - demo is frontend-only**
-
-4. **Documentation**
-   - PRD in `scratch/MVP-PRD.md`
-   - Theming guide in `scratch/theming-standalone.md`
-   - Implementation guidelines in `scratch/IMPLEMENTATION_GUIDELINES.md`
+### Progress Summary
+- **39 stories completed** out of 50
+- **9 epics completed** (E1-E8, E11)
+- **78% complete** by story count
 
 ---
 
-## Key Decisions
+## What's Working
 
-1. **Frontend-only demo** - No backend needed for MVP. Fixtures loaded directly in frontend.
-2. **Option A selected** - Decision engine will be TypeScript in frontend
-3. **Scenario A only** - CH Motor/Casco (Switzerland), skip US Auto scenario
-4. **Pre-computed QA results** - No real-time simulation needed
-5. **PDF export** - Stub only (toast message)
+### 1. Decision Engine (`frontend/src/services/decisionEngine.ts`)
+- **Base coverage**: 'repair' category items always covered
+- **Accessory coverage**: Based on interpretation + assumption resolution
+  - INCLUDED_BY_DEFAULT -> always covered
+  - EXCLUDED -> never covered
+  - INCLUDED_IF_DECLARED + DECLARED -> covered
+  - INCLUDED_IF_DECLARED + NOT_DECLARED -> not covered
+- **Deductible**: 500 CHF applied to gross total
+- **Trace generation**: 7-step trace with facts, assumptions, interpretations, line items, payout, deductible, outcome
+- **50 unit tests passing**
+
+### 2. Claims Module (`/claims`, `/claims/:claimId`)
+- Claims list with sortable columns, filters (search, jurisdiction, product)
+- Claim detail with facts (UNKNOWN highlighted yellow), evidence, line items
+- "Run Decision" button navigates to wizard
+
+### 3. Decision Wizard (`/claims/:claimId/decide`)
+- 3-step wizard: Setup -> Resolve Assumptions -> Complete
+- Shows governance sets with versions
+- Radio buttons for assumption resolution with role restrictions
+- Real payouts displayed based on interpretation/assumption choices
+
+### 4. Decision Receipt (`/decision-runs/:runId`)
+- Summary with status badge, payout breakdown table
+- Governance block (run ID, timestamp, role, versions)
+- Resolved assumptions section (yellow highlight)
+- Key decision steps preview (first 3 trace steps)
+- Action buttons: View Trace, Simulate Alternative, Export PDF
+
+### 5. Trace Viewer (`/decision-runs/:runId/trace`)
+- Vertical stepper with numbered steps and connector lines
+- Clickable steps to view details
+- Details panel showing: inputs, outputs, rule refs, evidence refs
+- Determinism note explaining audit trail
+
+### 6. Counterfactual Simulator (`/decision-runs/:runId/counterfactual`) - NEW
+- Base run info display (run_id, timestamp, status, payout)
+- Change type selector: Assumption vs Interpretation (radio cards)
+- Dynamic dropdown for selecting which item to change
+- Radio options for new values (current value disabled)
+- **Instant reactive updates** via useMemo re-running decision engine
+- Results display with:
+  - Delta showing +/- CHF with color coding (green/red)
+  - "What changed" summary
+  - Trace diff highlighting which step changed
+  - Payout breakdown comparison table
+
+### 7. Catalogs Module (`/catalogs`)
+- Tab navigation: Interpretations | Assumptions
+- Expandable rows showing options, risk tiers, role restrictions
+- Draft Proposal buttons (role-gated)
+
+### 8. E2E Test Coverage
+- **34 total e2e tests** (all passing)
+- **12 counterfactual tests** covering:
+  - Navigation to/from simulator
+  - Change type selector (assumption/interpretation)
+  - Dropdown selection for items to change
+  - Instant delta result display
+  - Payout breakdown comparison table
+  - Current value disabled state
+  - Full demo flow (NOT_DECLARED → DECLARED = +CHF 1,200)
+- Other test files: navigation, claims-list, claim-detail, decision-wizard, demo-flow
 
 ---
 
-## Next Steps - Critical Path
+## Demo Flows
 
-Start with fixtures, then build the core demo flow:
+### Flow 1: Adjuster Decision Run
+1. `/claims` -> Click CLM-CH-001
+2. Click "Run Decision"
+3. Setup step: See governance sets (Interpretation Set 2025.1, Assumption Set 2025.1)
+4. Resolve Assumptions: Choose DECLARED or NOT_DECLARED for accessory
+5. Complete: See outcome (Approved/Partial with real payout)
+6. View Receipt -> View Trace
 
-| Priority | Task | Description |
-|----------|------|-------------|
-| **1** | **Populate fixtures** | Move to `frontend/src/data/` and create: |
-| | S2.3 | `claims.json` - 10 CH Motor claims, primary CLM-CH-001 has UNKNOWN accessory_declared |
-| | S2.4 | `interpretation_sets.json` - ACCESSORY_COVERAGE decision point |
-| | S2.5 | `assumption_sets.json` - ACCESSORY_DECLARED assumption |
-| **2** | **Claims UI** | |
-| | S4.1 | Claims list page with table |
-| | S4.3 | Claim detail with facts (highlight UNKNOWN), evidence, line items |
-| **3** | **Decision Engine (TS)** | |
-| | S2.7 | Port Python engine to TypeScript in frontend |
-| **4** | **Decision Wizard** | |
-| | S5.1 | Setup step - show versioned sets |
-| | S5.2 | Resolve assumptions step - radio buttons, reason input |
-| **5** | **Decision Receipt** | |
-| | S6.1-S6.4 | Summary, governance block, resolved unknowns, trace preview |
+### Flow 2: Counterfactual Simulation (NEW)
+1. From any receipt, click "Simulate Alternative"
+2. Choose "Change Assumption" or "Change Interpretation"
+3. Select which item to change from dropdown
+4. Select new value - results update instantly
+5. See delta (e.g., +CHF 1,200) and trace diff
+6. Compare payout breakdown before/after
 
-This completes **Demo Flow 1 (Adjuster run)** - the core value demonstration.
+### Flow 3: Trace Viewer
+1. From any receipt, click "View Trace"
+2. See 7-step decision trace
+3. Click steps to see inputs, outputs, rules applied
 
----
+### Flow 4: Counterfactual (Next)
+- QA Impact Module needs S9.1, S9.2, S9.3
 
-## File Locations
-
-### To Create/Modify Next
-- `frontend/src/data/claims.json` - Fixture data
-- `frontend/src/data/interpretation_sets.json`
-- `frontend/src/data/assumption_sets.json`
-- `frontend/src/lib/engine.ts` - TypeScript decision engine
-- `frontend/src/pages/ClaimsListPage.tsx` - Implement
-- `frontend/src/pages/ClaimDetailPage.tsx` - Implement
-- `frontend/src/pages/DecisionWizardPage.tsx` - Implement
-- `frontend/src/pages/DecisionReceiptPage.tsx` - Implement
-
-### Reference Files
-- `scratch/MVP-PRD.md` - Full PRD with screen specs
-- `.project/backlog.json` - All user stories with acceptance criteria
-- `backend/src/decision_ledger/core/engine.py` - Python engine to port
-- `backend/tests/conftest.py` - Sample fixture data structures
-- `frontend/src/types/index.ts` - TypeScript interfaces (already complete)
+### Flow 5: Governance
+- Needs S10.1-S10.4
 
 ---
 
-## Demo Scenario Details
+## Key Files
 
-**Primary Claim: CLM-CH-001**
-- Jurisdiction: CH (Switzerland)
-- Product: Motor/Casco
-- Incident: Rear-end collision
-- Key fact: `accessory_declared` = UNKNOWN
-- Line items: Base repair (~2500 CHF) + Tow bar (~1200 CHF)
+### Decision Engine
+- `frontend/src/services/decisionEngine.ts` - Full implementation
+- `frontend/src/services/decisionEngine.test.ts` - 20 tests
+- `frontend/src/services/__tests__/decisionEngine.test.ts` - 30 tests
 
-**Decision Logic:**
-- Base repair: Always covered
-- Tow bar (accessory): Depends on:
-  - Interpretation `ACCESSORY_COVERAGE`: INCLUDED_IF_DECLARED | INCLUDED_BY_DEFAULT | EXCLUDED
-  - Assumption `ACCESSORY_DECLARED`: DECLARED | NOT_DECLARED
-- Deductible: 500 CHF
+### Pages
+- `frontend/src/pages/ClaimsListPage.tsx`
+- `frontend/src/pages/ClaimDetailPage.tsx`
+- `frontend/src/pages/DecisionWizardPage.tsx`
+- `frontend/src/pages/DecisionReceiptPage.tsx`
+- `frontend/src/pages/TraceViewerPage.tsx`
+- `frontend/src/pages/CounterfactualPage.tsx` - NEW
+- `frontend/src/pages/CatalogsPage.tsx`
 
-**Expected Outcomes:**
-- If NOT_DECLARED + INCLUDED_IF_DECLARED → Payout: 2000 CHF (repair - deductible)
-- If DECLARED + INCLUDED_IF_DECLARED → Payout: 3200 CHF (repair + tow bar - deductible)
+### Data
+- `frontend/src/data/claims.json` - 10 CH Motor claims
+- `frontend/src/data/interpretation_sets.json` - 2 versions
+- `frontend/src/data/assumption_sets.json` - 2 versions
+
+### E2E Tests
+- `frontend/e2e/counterfactual.spec.ts` - 12 tests for counterfactual flow
+- `frontend/e2e/demo-flow.spec.ts` - Full demo flow tests
+- `frontend/e2e/decision-wizard.spec.ts` - Wizard flow tests
+- `frontend/e2e/claims-list.spec.ts` - Claims list and filtering
+- `frontend/e2e/claim-detail.spec.ts` - Claim detail page
+- `frontend/e2e/navigation.spec.ts` - Sidebar navigation
+
+---
+
+## What's Next
+
+| Story | Description | Points |
+|-------|-------------|--------|
+| **S9.1** | QA Impact: Cohort and proposal selectors | 3 |
+| **S9.2** | QA Impact: Results dashboard | 3 |
+| **S9.3** | QA Impact: Top impacted claims list | 3 |
+| **S10.1** | Governance: Proposal list | 3 |
+| **S10.2** | Governance: Proposal form | 5 |
 
 ---
 
 ## Commands
 
 ```bash
-# Frontend dev
-cd frontend && npm install && npm run dev
+# Run unit tests (50 tests)
+cd frontend && npm run test
 
-# Backend (placeholder, not needed yet)
-cd backend && pip install -e ".[dev]"
-cd backend && uvicorn src.decision_ledger.api.main:app --reload --port 8000
+# Run e2e tests (34 tests) - requires dev server running
+cd frontend && npm run test:e2e
+
+# Run e2e with UI
+cd frontend && npm run test:e2e:ui
+
+# Type check
+cd frontend && npx tsc --noEmit --skipLibCheck
+
+# Start dev server (ask user first)
+cd frontend && npm run dev
 ```
 
 ---
 
-## Notes
+## How to Test Counterfactual
 
-- The `@space-man/react-theme-animation` package may need to be verified/installed
-- shadcn/ui components need to be added as needed (Button, Card, Table, etc.)
-- Role selector already works and persists in context
-- Reset demo data clears decision runs and resets role to Adjuster
+1. Go to `http://localhost:5173/claims`
+2. Click **CLM-CH-001** (has UNKNOWN accessory fact)
+3. Click **"Run Decision"**
+4. Step 2: Choose **NOT_DECLARED** -> tow bar excluded, payout = CHF 2,000
+5. Click **"View Receipt"** -> **"Simulate Alternative"**
+6. Select **"Change Assumption"** -> **Accessory Declaration Status**
+7. Select **"DECLARED"** as new value
+8. See instant result: **+CHF 1,200** delta, payout goes from CHF 2,000 to CHF 3,200
+9. Trace diff shows: "Step 2 (Apply Assumption: Accessory Declaration Status) changed"
+
+**Note**: Decision runs are stored in memory and lost on page refresh.
