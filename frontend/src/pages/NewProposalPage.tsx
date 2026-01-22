@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { FileText, CheckCircle, Circle, ArrowLeft } from 'lucide-react';
+import { FileText, CheckCircle, Circle, ArrowLeft, Send, Plus } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { qaProposedChanges, qaCohorts, getQAStudyResult } from '@/data';
 import { formatCHF, cn } from '@/lib/utils';
@@ -168,8 +168,9 @@ export function NewProposalPage() {
                 setQaResult(null);
                 setQaProposal(null);
               }}
-              className="inline-flex items-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
             >
+              <Plus className="h-4 w-4" />
               Create Another
             </button>
           </div>
@@ -298,13 +299,20 @@ export function NewProposalPage() {
               type="submit"
               disabled={isSubmitting || !title.trim() || !rationale.trim()}
               className={cn(
-                'inline-flex items-center rounded-md px-4 py-2 text-sm font-medium',
+                'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium',
                 !isSubmitting && title.trim() && rationale.trim()
                   ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                   : 'bg-muted text-muted-foreground cursor-not-allowed'
               )}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit for Approval'}
+              {isSubmitting ? (
+                'Submitting...'
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  Submit for Approval
+                </>
+              )}
             </button>
           </div>
         </div>

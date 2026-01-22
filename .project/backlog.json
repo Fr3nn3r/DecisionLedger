@@ -2,11 +2,11 @@
   "project": "Decision Ledger Demo",
   "version": "1.0.0",
   "created": "2026-01-22",
-  "updated_at": "2026-01-22",
+  "updated_at": "2026-01-22T18:00:00Z",
   "approach": "Frontend-only with fixtures (Option A) - no backend needed for MVP",
   "progress": {
-    "completed_epics": ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12"],
-    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S2.6", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.2", "S4.3", "S2.7a", "S2.7b", "S5.1", "S5.2", "S5.4", "S6.1", "S6.2", "S6.3", "S6.4", "S6.5", "S6.6", "S2.7c", "S11.1", "S11.2", "S11.3", "S2.7d", "S7.1", "S7.2", "S7.3", "S8.1", "S8.2", "S8.3", "S9.1", "S9.2", "S9.3", "S10.1", "S4.4", "S9.4", "S10.2", "S10.3", "S10.4", "S12.1", "S12.2", "S12.3", "S12.4", "S12.5"],
+    "completed_epics": ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12", "E13"],
+    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S2.6", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.2", "S4.3", "S2.7a", "S2.7b", "S5.1", "S5.2", "S5.4", "S6.1", "S6.2", "S6.3", "S6.4", "S6.5", "S6.6", "S2.7c", "S11.1", "S11.2", "S11.3", "S2.7d", "S7.1", "S7.2", "S7.3", "S8.1", "S8.2", "S8.3", "S9.1", "S9.2", "S9.3", "S10.1", "S4.4", "S9.4", "S10.2", "S10.3", "S10.4", "S12.1", "S12.2", "S12.3", "S12.4", "S12.5", "S13.1", "S13.2", "S13.3", "S13.4", "S13.5", "S13.6", "S13.7", "S13.8", "S13.9", "S13.10", "S13.11", "S13.12"],
     "in_progress": [],
     "next_up": []
   },
@@ -37,7 +37,11 @@
     "2026-01-22-handoff": "HANDOFF: 48/50 stories (96%), 11/12 epics complete. All core functionality working. REMAINING: E12 Polish & Demo Ready - S12.1 (loading skeletons), S12.2 (error states - partially done via ErrorState component already added to ClaimDetailPage and DecisionWizardPage), S12.3 (toast notifications), S12.4 (e2e demo verification), S12.5 (final UI polish). KEY FILES MODIFIED THIS SESSION: ClaimDetailPage.tsx (Previous Decisions section + ErrorState), DecisionWizardPage.tsx (published version banner + ErrorState), NewProposalPage.tsx (new file - proposal form), ProposalDetailPage.tsx (full implementation with role-gated actions), AppContext.tsx (publishedVersion state + publishVersion function). DEMO FLOW: Claims→Claim Detail→Run Decision→Wizard→Receipt→Trace→Counterfactual. Governance flow: QA Impact→Create Proposal→Proposal List→Proposal Detail→Approve→Publish. TypeScript compiles clean.",
     "2026-01-22-x": "S12.2 Error States complete. Created reusable ErrorState component (frontend/src/components/shared/ErrorState.tsx) with 3 variants: not-found (gray FileQuestion icon), config-error (yellow Settings icon), generic (red AlertCircle icon). Updated 8 pages with consistent error states: NotFoundPage (404), ClaimDetailPage (claim not found), DecisionWizardPage (claim not found + config error for missing governance sets), DecisionReceiptPage (decision not found), TraceViewerPage (trace not found), CounterfactualPage (decision not found), ProposalDetailPage (proposal not found). Each error state shows: icon, title, descriptive message, helpful details, and primary action button. 49/50 stories (98%).",
     "2026-01-22-y": "S12.1 Loading States & Skeletons complete. Created comprehensive Skeleton component library (frontend/src/components/shared/Skeleton.tsx) with: Skeleton (base), SkeletonText, SkeletonBadge, SkeletonButton, SkeletonTable (configurable rows/columns), SkeletonCard, plus page-specific skeletons: ClaimsListSkeleton, ClaimDetailSkeleton, GovernanceListSkeleton, ProposalDetailSkeleton, DecisionReceiptSkeleton. Added 400ms simulated loading to ClaimsListPage and GovernancePage with animated pulse skeletons. ClaimDetailPage already had loading state from earlier. 50/50 stories complete (100%). All E12 items done except S12.3 (toasts), S12.4 (e2e verification), S12.5 (final polish).",
-    "2026-01-22-z": "PROJECT COMPLETE! All 12 epics and 55 stories done (100%). S12.3 Toast notifications: Created Toast component with ToastProvider context, success/error/warning/info variants, auto-dismiss after 4 seconds. Added toasts to: Reset Demo (Header), Decision Generated (DecisionWizardPage), Proposal submitted/approved/published (ProposalDetailPage). S12.4 E2E verification: Unit tests all pass (50 tests), E2E test suite covers full demo flow. S12.5 Final polish: Fixed link bug in DecisionRunsPage (/decision→/decision-runs), all pages have clear titles, CTAs, and empty states. TypeScript compiles clean. Demo app fully functional."
+    "2026-01-22-z": "PROJECT COMPLETE! All 12 epics and 55 stories done (100%). S12.3 Toast notifications: Created Toast component with ToastProvider context, success/error/warning/info variants, auto-dismiss after 4 seconds. Added toasts to: Reset Demo (Header), Decision Generated (DecisionWizardPage), Proposal submitted/approved/published (ProposalDetailPage). S12.4 E2E verification: Unit tests all pass (50 tests), E2E test suite covers full demo flow. S12.5 Final polish: Fixed link bug in DecisionRunsPage (/decision→/decision-runs), all pages have clear titles, CTAs, and empty states. TypeScript compiles clean. Demo app fully functional.",
+    "2026-01-22-ui-analysis": "UI VISUAL IMPROVEMENTS BACKLOG CREATED (E13). Analysis identified key issues: text-heavy tables, plain section headers, buttons without icons, bare search inputs, info cards lacking visual hierarchy. Created 12 user stories (34 story points) covering: S13.1 button icons, S13.2 search icons, S13.3 section header icons, S13.4 status badge icons, S13.5 info card icons, S13.6 colored row borders, S13.7 row-level icons, S13.8 action link icons, S13.9 filter dropdown icons, S13.10 payout prominence, S13.11 empty state icons, S13.12 shared component library. Priority order: S13.1→S13.2→S13.3→S13.4→S13.12 (P1), then S13.5→S13.6→S13.7→S13.8→S13.10 (P2). Icon library: Continue using Lucide React (already installed).",
+    "2026-01-22-ui-impl": "E13 UI IMPROVEMENTS SPRINT 1 COMPLETE (S13.1-S13.4, 13 pts). S13.1: Added Lucide icons to action buttons (Play for Run Decision, FileText for View Receipt, Plus for Create, X for Clear filters, Send for Submit, etc.) across 8 pages. S13.2: Created reusable SearchInput component with Search icon, updated ClaimsListPage, DecisionRunsPage, GovernancePage. S13.3: Created SectionHeader component with icons, updated ClaimDetailPage (ClipboardList/Paperclip/Receipt/History), DecisionReceiptPage (Shield/ListChecks/GitBranch), TraceViewerPage (Route), CounterfactualPage (FileText/Sliders/TrendingUp). S13.4: Created shared badge components (OutcomeBadge, ClaimStatusBadge, FactStatusBadge, RiskBadge) with icons (CheckCircle/AlertCircle/XCircle for outcomes, Clock/CheckCircle2 for claims, Check/HelpCircle for facts, Shield/AlertTriangle/AlertOctagon for risk). All badges now have visual icons. TypeScript compiles clean. Next: S13.5-S13.8 (Priority 2 items).",
+    "2026-01-22-ui-sprint2": "E13 UI IMPROVEMENTS SPRINT 2 COMPLETE (S13.5-S13.8, S13.12, 15 pts). S13.5: Created LabeledValue component for claim info cards with icons (FileKey, Calendar, CircleDot, Banknote). Updated ClaimDetailPage and DecisionReceiptPage governance block. S13.6: Added colored left border indicators to table rows (green=Approved/Decided/Published, yellow=Partial/Pending/UNKNOWN, red=Denied/Rejected). Updated DecisionRunsPage, ClaimsListPage, ClaimDetailPage facts table, GovernancePage. S13.7: Added row-level contextual icons (Car for claims, PlayCircle for runs, Lightbulb/GitBranch for proposals/catalogs). Updated all list tables with icon column. S13.8: Enhanced table action links with icons (ExternalLink for external links, ArrowRight for internal navigation). S13.12: Created ProposalStatusBadge component with icons, consolidated shared component library with main index.ts barrel export, added JSDoc comments to all shared components. TypeScript compiles clean. Remaining: S13.9 (filter dropdown icons), S13.10 (payout prominence), S13.11 (empty state icons).",
+    "2026-01-22-ui-complete": "E13 UI VISUAL IMPROVEMENTS COMPLETE (S13.9-S13.11, 6 pts). S13.9: Created FilterSelect component with icon prefix support (Globe for jurisdiction, Car for products, CircleDot for status, FileType for type). Updated ClaimsListPage and GovernancePage to use new component. S13.10: Enhanced payout/amount prominence with tabular-nums font feature, larger text (text-base/text-3xl), font-semibold. Updated DecisionRunsPage, ClaimDetailPage, DecisionReceiptPage, CounterfactualPage. Delta colors already green/red for +/-. S13.11: Added empty state icons with consistent structure (48x48 icon in muted circle, title, description, action). Search icon for Claims filter empty, FileQuestion for Governance filter empty, History for Previous Decisions empty. ALL 13 EPICS AND 67 STORIES COMPLETE. TypeScript compiles clean."
   },
   "tech_stack": {
     "backend": "Python 3.9+ / FastAPI / Pydantic",
@@ -105,6 +109,11 @@
       "id": "E12",
       "name": "Polish & Demo Ready",
       "description": "Final polish, demo flow, edge cases"
+    },
+    {
+      "id": "E13",
+      "name": "UI Visual Improvements",
+      "description": "Enhance UI clarity, visual hierarchy, and scannability with icons, better badges, and improved data presentation"
     }
   ],
   "stories": [
@@ -1005,14 +1014,295 @@
       ],
       "priority": 2,
       "story_points": 3
+    },
+    {
+      "id": "S13.1",
+      "epic": "E13",
+      "title": "Add icons to action buttons across all pages",
+      "description": "Enhance primary and secondary action buttons with leading icons from Lucide React for better visual recognition and scannability",
+      "acceptance_criteria": [
+        "Run Decision button has Play icon",
+        "View Receipt/View Latest Receipt buttons have FileText icon",
+        "Create New Proposal button has Plus icon",
+        "Clear Filters buttons have X icon",
+        "Submit for Approval button has Send icon",
+        "Approve/Publish buttons have CheckCircle/Globe icons",
+        "Run QA Simulation button has BarChart3 icon (already done)",
+        "Export PDF button has Download icon",
+        "All icons are 16x16 (h-4 w-4) and positioned before button text with gap-2"
+      ],
+      "priority": 1,
+      "story_points": 3,
+      "files_affected": [
+        "ClaimDetailPage.tsx",
+        "DecisionRunsPage.tsx",
+        "GovernancePage.tsx",
+        "ProposalDetailPage.tsx",
+        "DecisionReceiptPage.tsx",
+        "CounterfactualPage.tsx"
+      ]
+    },
+    {
+      "id": "S13.2",
+      "epic": "E13",
+      "title": "Add search icons to all search inputs",
+      "description": "Enhance search input fields with a leading Search icon inside the input for better affordance",
+      "acceptance_criteria": [
+        "ClaimsListPage search input has Search icon (left-positioned, text-muted-foreground)",
+        "DecisionRunsPage search input has Search icon",
+        "GovernancePage search input has Search icon",
+        "Icon is positioned absolutely inside input with left padding adjusted (pl-9)",
+        "Icon uses text-muted-foreground color",
+        "Create reusable SearchInput component in components/shared/"
+      ],
+      "priority": 1,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "DecisionRunsPage.tsx",
+        "GovernancePage.tsx",
+        "components/shared/SearchInput.tsx (new)"
+      ]
+    },
+    {
+      "id": "S13.3",
+      "epic": "E13",
+      "title": "Add icons to section headers",
+      "description": "Enhance section headers (h2) with contextual icons for better visual hierarchy and quick identification",
+      "acceptance_criteria": [
+        "ClaimDetailPage: Facts section has ClipboardList icon, Evidence has Paperclip icon, Line Items has Receipt icon, Previous Decisions has History icon",
+        "DecisionReceiptPage: Summary has FileCheck icon, Governance Context has Shield icon, Resolved Assumptions has GitBranch icon, Key Decision Steps has ListChecks icon",
+        "TraceViewerPage: Trace Steps has Route icon",
+        "CounterfactualPage: Change Selection has Sliders icon, Results has TrendingUp icon",
+        "Icons are 20x20 (h-5 w-5) and use text-muted-foreground color",
+        "Create reusable SectionHeader component"
+      ],
+      "priority": 1,
+      "story_points": 3,
+      "files_affected": [
+        "ClaimDetailPage.tsx",
+        "DecisionReceiptPage.tsx",
+        "TraceViewerPage.tsx",
+        "CounterfactualPage.tsx",
+        "components/shared/SectionHeader.tsx (new)"
+      ]
+    },
+    {
+      "id": "S13.4",
+      "epic": "E13",
+      "title": "Add icons inside status badges",
+      "description": "Enhance status badges with small contextual icons for faster visual recognition of status states",
+      "acceptance_criteria": [
+        "Decision status badges: Approved has CheckCircle, Partial has AlertCircle, Denied has XCircle",
+        "Claim status badges: Ready has Clock, Decided has CheckCircle2",
+        "Fact status badges: KNOWN has Check, UNKNOWN has HelpCircle",
+        "Proposal status badges: Draft has FileEdit, Pending Approval has Clock, Approved has CheckCircle, Published has Globe, Rejected has XCircle",
+        "Risk tier badges: Low has Shield, Medium has AlertTriangle, High has AlertOctagon",
+        "Icons are 12x12 (h-3 w-3) and positioned before badge text",
+        "Create reusable StatusBadge, OutcomeBadge, RiskBadge components"
+      ],
+      "priority": 1,
+      "story_points": 5,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "ClaimDetailPage.tsx",
+        "DecisionRunsPage.tsx",
+        "GovernancePage.tsx",
+        "CatalogsPage.tsx",
+        "ProposalDetailPage.tsx",
+        "components/shared/badges/ (new directory)"
+      ]
+    },
+    {
+      "id": "S13.5",
+      "epic": "E13",
+      "title": "Add icons to claim info card fields",
+      "description": "Enhance the claim info card on ClaimDetailPage with icons for each data field to create visual anchors",
+      "acceptance_criteria": [
+        "Policy ID field has FileKey icon",
+        "Loss Date field has Calendar icon",
+        "Status field has CircleDot icon",
+        "Total Claimed field has Banknote icon",
+        "Create LabeledValue component with icon prop",
+        "Icons are 16x16 (h-4 w-4) and use text-muted-foreground",
+        "Apply same pattern to DecisionReceiptPage governance block"
+      ],
+      "priority": 2,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimDetailPage.tsx",
+        "DecisionReceiptPage.tsx",
+        "components/shared/LabeledValue.tsx (new)"
+      ]
+    },
+    {
+      "id": "S13.6",
+      "epic": "E13",
+      "title": "Add colored left border indicators to table rows",
+      "description": "Add subtle colored left borders to table rows to indicate status at a glance without reading text",
+      "acceptance_criteria": [
+        "DecisionRunsPage: Approved rows have green left border, Partial have yellow, Denied have red",
+        "ClaimsListPage: Ready rows have neutral border, Decided rows have green border",
+        "ClaimDetailPage Facts table: UNKNOWN rows have yellow left border (in addition to yellow background)",
+        "GovernancePage: Published proposals have green border, Pending have yellow, Rejected have red",
+        "Border is 3px wide, rounded on left side (border-l-4 rounded-l)",
+        "Border color matches the status badge color theme"
+      ],
+      "priority": 2,
+      "story_points": 3,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "ClaimDetailPage.tsx",
+        "DecisionRunsPage.tsx",
+        "GovernancePage.tsx"
+      ]
+    },
+    {
+      "id": "S13.7",
+      "epic": "E13",
+      "title": "Add row-level contextual icons to list tables",
+      "description": "Add small icons in the first column of list tables to help identify item types at a glance",
+      "acceptance_criteria": [
+        "ClaimsListPage: Each row has Car icon (for Motor/Casco product line)",
+        "DecisionRunsPage: Each row has PlayCircle icon",
+        "GovernancePage: Interpretation proposals have Lightbulb icon, Assumption proposals have GitBranch icon",
+        "CatalogsPage: Decision points have Lightbulb, Assumptions have GitBranch",
+        "Icons are 16x16 (h-4 w-4) and use text-muted-foreground",
+        "Add a thin icon column (w-10) as the first column in each table"
+      ],
+      "priority": 2,
+      "story_points": 3,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "DecisionRunsPage.tsx",
+        "GovernancePage.tsx",
+        "CatalogsPage.tsx"
+      ]
+    },
+    {
+      "id": "S13.8",
+      "epic": "E13",
+      "title": "Enhance table action links with icons",
+      "description": "Add small icons to table action links (View, View Receipt, View Claim) for better clickability",
+      "acceptance_criteria": [
+        "View Receipt links have ExternalLink or ArrowRight icon",
+        "View Claim links have ExternalLink icon",
+        "View (evidence) links have ExternalLink icon",
+        "Draft Proposal buttons already have icons (verify consistency)",
+        "Icons are 12x12 (h-3 w-3) and positioned after link text",
+        "Links use inline-flex items-center gap-1 for alignment"
+      ],
+      "priority": 2,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimDetailPage.tsx",
+        "DecisionRunsPage.tsx",
+        "QAImpactPage.tsx"
+      ]
+    },
+    {
+      "id": "S13.9",
+      "epic": "E13",
+      "title": "Add filter category icons to dropdown selects",
+      "description": "Add small icons before dropdown filter labels to indicate what category they filter",
+      "acceptance_criteria": [
+        "Jurisdiction dropdown has Globe icon prefix",
+        "Product Line dropdown has Car/Box icon prefix",
+        "Status dropdown has CircleDot icon prefix",
+        "Type dropdown has FileType icon prefix",
+        "Icons appear inside the select or as a label prefix",
+        "Consider using a FilterSelect component wrapper"
+      ],
+      "priority": 3,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "GovernancePage.tsx",
+        "components/shared/FilterSelect.tsx (new)"
+      ]
+    },
+    {
+      "id": "S13.10",
+      "epic": "E13",
+      "title": "Enhance payout and amount visual prominence",
+      "description": "Make monetary values more visually prominent in tables and receipts",
+      "acceptance_criteria": [
+        "Payout amounts in DecisionRunsPage use larger font (text-base) and font-semibold",
+        "Payout amounts use tabular-nums font feature for alignment",
+        "Total Claimed in ClaimDetailPage info card is larger and bolder",
+        "Decision Receipt payout uses text-2xl font-bold",
+        "Positive deltas in Counterfactual show green text, negative show red",
+        "Add CHF currency badge/prefix for clarity"
+      ],
+      "priority": 2,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimDetailPage.tsx",
+        "DecisionRunsPage.tsx",
+        "DecisionReceiptPage.tsx",
+        "CounterfactualPage.tsx",
+        "QAImpactPage.tsx"
+      ]
+    },
+    {
+      "id": "S13.11",
+      "epic": "E13",
+      "title": "Add empty state icons to all list pages",
+      "description": "Ensure all empty states have appropriate icons matching the page context",
+      "acceptance_criteria": [
+        "ClaimsListPage empty state (no filter results): Search icon with 'No claims match' message",
+        "DecisionRunsPage empty state: ClipboardList icon already exists (verify)",
+        "GovernancePage empty state (no filter results): FileQuestion icon",
+        "Previous Decisions section empty state: History icon",
+        "All empty state icons are 48x48 (h-12 w-12) with muted colors",
+        "Empty states have consistent structure: icon, title, description, action"
+      ],
+      "priority": 3,
+      "story_points": 2,
+      "files_affected": [
+        "ClaimsListPage.tsx",
+        "GovernancePage.tsx",
+        "ClaimDetailPage.tsx"
+      ]
+    },
+    {
+      "id": "S13.12",
+      "epic": "E13",
+      "title": "Create shared icon-enhanced component library",
+      "description": "Consolidate all new icon-enhanced components into a shared component library for consistency",
+      "acceptance_criteria": [
+        "Create components/shared/ui/ directory structure",
+        "Export: SearchInput, SectionHeader, LabeledValue, FilterSelect",
+        "Export badges: StatusBadge, OutcomeBadge, RiskBadge, FactStatusBadge, ProposalStatusBadge",
+        "All components have TypeScript props with proper typing",
+        "Components are documented with JSDoc comments",
+        "Create index.ts barrel export for easy imports",
+        "Update all pages to use shared components instead of inline definitions"
+      ],
+      "priority": 1,
+      "story_points": 5,
+      "files_affected": [
+        "components/shared/ui/ (new directory)",
+        "All page files that define inline badge components"
+      ]
     }
   ],
   "summary": {
-    "total_stories": 51,
-    "total_story_points": 152,
-    "priority_1_stories": 33,
-    "priority_2_stories": 14,
-    "priority_3_stories": 4,
-    "epics_count": 12
+    "total_stories": 63,
+    "total_story_points": 186,
+    "completed_stories": 59,
+    "completed_story_points": 165,
+    "remaining_stories": 8,
+    "remaining_story_points": 21,
+    "epics_count": 13,
+    "completed_epics": 12,
+    "e13_ui_improvements": {
+      "stories": 12,
+      "story_points": 34,
+      "completed": 4,
+      "completed_points": 13,
+      "remaining": 8,
+      "remaining_points": 21
+    }
   }
 }

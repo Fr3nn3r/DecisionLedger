@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { X, FileText, PlayCircle } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { SearchInput } from '@/components/shared/SearchInput';
+import { OutcomeBadge } from '@/components/shared/badges';
 import { formatCHF, formatDateTime, cn } from '@/lib/utils';
-import type { DecisionStatus } from '@/types';
 
 const FILTER_KEYS = {
   search: 'q',
@@ -49,21 +51,6 @@ function SortableHeader({
         </span>
       </span>
     </th>
-  );
-}
-
-function OutcomeBadge({ status }: { status: DecisionStatus }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        status === 'Approved' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-        status === 'Partial' && 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-        status === 'Denied' && 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      )}
-    >
-      {status}
-    </span>
   );
 }
 
@@ -179,8 +166,9 @@ export function DecisionRunsPage() {
           </p>
           <Link
             to="/claims"
-            className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
+            <FileText className="h-4 w-4" />
             Go to Claims
           </Link>
         </div>
@@ -195,22 +183,20 @@ export function DecisionRunsPage() {
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {/* Search input */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search run ID or claim ID..."
-            value={searchFilter}
-            onChange={(e) => updateFilter(FILTER_KEYS.search, e.target.value)}
-            className="h-9 w-64 rounded-md border border-input bg-background px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-        </div>
+        <SearchInput
+          value={searchFilter}
+          onChange={(value) => updateFilter(FILTER_KEYS.search, value)}
+          placeholder="Search run ID or claim ID..."
+          className="w-64"
+        />
 
         {/* Clear filters button */}
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
           >
+            <X className="h-4 w-4" />
             Clear filters
           </button>
         )}
@@ -225,6 +211,7 @@ export function DecisionRunsPage() {
         <table className="w-full">
           <thead className="bg-muted text-muted-foreground">
             <tr>
+              <th className="w-10 px-2 py-3"></th>
               <SortableHeader
                 label="Run ID"
                 sortKey="run_id"
@@ -261,7 +248,7 @@ export function DecisionRunsPage() {
           <tbody className="bg-card">
             {filteredAndSortedRuns.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                   No decision runs match your search.{' '}
                   <button onClick={clearFilters} className="text-primary hover:underline">
                     Clear filters
@@ -272,8 +259,16 @@ export function DecisionRunsPage() {
               filteredAndSortedRuns.map((run) => (
                 <tr
                   key={run.run_id}
-                  className="border-b border-border last:border-b-0 hover:bg-muted/50"
+                  className={cn(
+                    'border-b border-border last:border-b-0 hover:bg-muted/50 border-l-4',
+                    run.outcome.status === 'Approved' && 'border-l-green-500',
+                    run.outcome.status === 'Partial' && 'border-l-yellow-500',
+                    run.outcome.status === 'Denied' && 'border-l-red-500'
+                  )}
                 >
+                  <td className="px-2 py-3 text-center">
+                    <PlayCircle className="h-4 w-4 text-muted-foreground" />
+                  </td>
                   <td className="px-4 py-3">
                     <Link
                       to={`/decision-runs/${run.run_id}`}
@@ -294,8 +289,10 @@ export function DecisionRunsPage() {
                   <td className="px-4 py-3">
                     <OutcomeBadge status={run.outcome.status} />
                   </td>
-                  <td className="px-4 py-3 text-sm text-right font-medium">
-                    {formatCHF(run.outcome.payout_total)}
+                  <td className="px-4 py-3 text-right">
+                    <span className="text-base font-semibold tabular-nums">
+                      {formatCHF(run.outcome.payout_total)}
+                    </span>
                   </td>
                 </tr>
               ))

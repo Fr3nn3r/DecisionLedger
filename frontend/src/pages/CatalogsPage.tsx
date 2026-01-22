@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FileEdit, Lightbulb, GitBranch } from 'lucide-react';
 import { interpretationSets, assumptionSets } from '@/data';
 import { useApp } from '@/context/AppContext';
 import { formatDate, cn } from '@/lib/utils';
@@ -148,6 +149,7 @@ export function CatalogsPage() {
                 <thead className="bg-muted/50 text-muted-foreground">
                   <tr>
                     <th className="w-8 px-4 py-2"></th>
+                    <th className="w-10 px-2 py-2"></th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Decision Point</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Default</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Options</th>
@@ -173,6 +175,9 @@ export function CatalogsPage() {
                           <td className="px-4 py-3">
                             <ChevronIcon expanded={isExpanded} />
                           </td>
+                          <td className="px-2 py-3 text-center">
+                            <Lightbulb className="h-4 w-4 text-muted-foreground" />
+                          </td>
                           <td className="px-4 py-3 font-medium">{dp.label}</td>
                           <td className="px-4 py-3">
                             <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
@@ -190,8 +195,9 @@ export function CatalogsPage() {
                             <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                               <Link
                                 to={`/governance?type=interpretation&ref=${dp.decision_point_id}`}
-                                className="inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                               >
+                                <FileEdit className="h-3 w-3" />
                                 Draft Proposal
                               </Link>
                             </td>
@@ -199,7 +205,7 @@ export function CatalogsPage() {
                         </tr>
                         {isExpanded && (
                           <tr key={`${dp.decision_point_id}-expanded`} className="border-b border-border last:border-b-0">
-                            <td colSpan={canDraftProposal(currentRole) ? 7 : 6} className="bg-muted/30 px-4 py-4">
+                            <td colSpan={canDraftProposal(currentRole) ? 8 : 7} className="bg-muted/30 px-4 py-4">
                               <div className="ml-8 space-y-4">
                                 <p className="text-sm text-muted-foreground">{dp.description}</p>
                                 <div className="space-y-2">
@@ -264,6 +270,7 @@ export function CatalogsPage() {
                 <thead className="bg-muted/50 text-muted-foreground">
                   <tr>
                     <th className="w-8 px-4 py-2"></th>
+                    <th className="w-10 px-2 py-2"></th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Assumption</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Trigger</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Risk Tier</th>
@@ -292,6 +299,9 @@ export function CatalogsPage() {
                           <td className="px-4 py-3">
                             <ChevronIcon expanded={isExpanded} />
                           </td>
+                          <td className="px-2 py-3 text-center">
+                            <GitBranch className="h-4 w-4 text-muted-foreground" />
+                          </td>
                           <td className="px-4 py-3 font-medium">{assumption.label}</td>
                           <td className="px-4 py-3 text-sm text-muted-foreground font-mono">
                             {assumption.trigger}
@@ -314,8 +324,9 @@ export function CatalogsPage() {
                             <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                               <Link
                                 to={`/governance?type=assumption&ref=${assumption.assumption_id}`}
-                                className="inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                               >
+                                <FileEdit className="h-3 w-3" />
                                 Draft Proposal
                               </Link>
                             </td>
@@ -323,7 +334,7 @@ export function CatalogsPage() {
                         </tr>
                         {isExpanded && (
                           <tr key={`${assumption.assumption_id}-expanded`} className="border-b border-border last:border-b-0">
-                            <td colSpan={canDraftProposal(currentRole) ? 8 : 7} className="bg-muted/30 px-4 py-4">
+                            <td colSpan={canDraftProposal(currentRole) ? 9 : 8} className="bg-muted/30 px-4 py-4">
                               <div className="ml-8 space-y-4">
                                 <p className="text-sm text-muted-foreground">{assumption.description}</p>
                                 <div className="space-y-2">

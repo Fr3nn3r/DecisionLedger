@@ -1,9 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { X, Car, Globe, Search } from 'lucide-react';
 import { getClaimSummaries } from '@/data';
 import { ClaimsListSkeleton } from '@/components/shared/Skeleton';
+import { SearchInput } from '@/components/shared/SearchInput';
+import { FilterSelect } from '@/components/shared/FilterSelect';
+import { ClaimStatusBadge } from '@/components/shared/badges';
 import { formatDate, cn } from '@/lib/utils';
-import type { ClaimStatus, ClaimSummary } from '@/types';
+import type { ClaimSummary } from '@/types';
 
 // Filter param keys for URL search params
 const FILTER_KEYS = {
@@ -52,21 +56,6 @@ function SortableHeader<T extends string>({
         </span>
       </span>
     </th>
-  );
-}
-
-function StatusBadge({ status }: { status: ClaimStatus }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        status === 'Ready'
-          ? 'bg-secondary text-secondary-foreground'
-          : 'bg-primary text-primary-foreground'
-      )}
-    >
-      {status}
-    </span>
   );
 }
 
@@ -182,50 +171,38 @@ export function ClaimsListPage() {
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {/* Search input */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search claim ID..."
-            value={searchFilter}
-            onChange={(e) => updateFilter(FILTER_KEYS.search, e.target.value)}
-            className="h-9 w-48 rounded-md border border-input bg-background px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-        </div>
+        <SearchInput
+          value={searchFilter}
+          onChange={(value) => updateFilter(FILTER_KEYS.search, value)}
+          placeholder="Search claim ID..."
+          className="w-48"
+        />
 
         {/* Jurisdiction dropdown */}
-        <select
+        <FilterSelect
           value={jurisdictionFilter}
-          onChange={(e) => updateFilter(FILTER_KEYS.jurisdiction, e.target.value)}
-          className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="">All Jurisdictions</option>
-          {uniqueJurisdictions.map((j) => (
-            <option key={j} value={j}>
-              {j}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => updateFilter(FILTER_KEYS.jurisdiction, value)}
+          options={uniqueJurisdictions}
+          placeholder="All Jurisdictions"
+          icon={Globe}
+        />
 
         {/* Product line dropdown */}
-        <select
+        <FilterSelect
           value={productLineFilter}
-          onChange={(e) => updateFilter(FILTER_KEYS.productLine, e.target.value)}
-          className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="">All Products</option>
-          {uniqueProductLines.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => updateFilter(FILTER_KEYS.productLine, value)}
+          options={uniqueProductLines}
+          placeholder="All Products"
+          icon={Car}
+        />
 
         {/* Clear filters button */}
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
           >
+            <X className="h-4 w-4" />
             Clear filters
           </button>
         )}
@@ -240,6 +217,7 @@ export function ClaimsListPage() {
         <table className="w-full">
           <thead className="bg-muted text-muted-foreground">
             <tr>
+              <th className="w-10 px-2 py-3"></th>
               <SortableHeader
                 label="Claim ID"
                 sortKey="claim_id"
@@ -269,22 +247,39 @@ export function ClaimsListPage() {
           <tbody className="bg-card">
             {filteredAndSortedClaims.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
-                  No claims match your filters.{' '}
-                  <button
-                    onClick={clearFilters}
-                    className="text-primary hover:underline"
-                  >
-                    Clear filters
-                  </button>
+                <td colSpan={5} className="px-4 py-12 text-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                      <Search className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium">No claims match your filters</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Try adjusting your search or{' '}
+                        <button
+                          onClick={clearFilters}
+                          className="text-primary hover:underline"
+                        >
+                          clear filters
+                        </button>
+                      </p>
+                    </div>
+                  </div>
                 </td>
               </tr>
             ) : (
               filteredAndSortedClaims.map((claim) => (
                 <tr
                   key={claim.claim_id}
-                  className="border-b border-border last:border-b-0 hover:bg-muted/50"
+                  className={cn(
+                    'border-b border-border last:border-b-0 hover:bg-muted/50 border-l-4',
+                    claim.status === 'Ready' && 'border-l-slate-300 dark:border-l-slate-600',
+                    claim.status === 'Decided' && 'border-l-green-500'
+                  )}
                 >
+                  <td className="px-2 py-3 text-center">
+                    <Car className="h-4 w-4 text-muted-foreground" />
+                  </td>
                   <td className="px-4 py-3">
                     <Link
                       to={`/claims/${claim.claim_id}`}
@@ -296,7 +291,7 @@ export function ClaimsListPage() {
                   <td className="px-4 py-3 text-sm">{claim.product_line}</td>
                   <td className="px-4 py-3 text-sm">{formatDate(claim.loss_date)}</td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={claim.status} />
+                    <ClaimStatusBadge status={claim.status} />
                   </td>
                 </tr>
               ))

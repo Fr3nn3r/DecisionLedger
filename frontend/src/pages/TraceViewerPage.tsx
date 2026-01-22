@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { TraceViewerSkeleton } from '@/components/shared/Skeleton';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, CheckCircle2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ExternalLink, Route } from 'lucide-react';
 import type { TraceStep, DecisionRun } from '@/types';
 
 function StepIndicator({
@@ -218,7 +218,8 @@ export function TraceViewerPage() {
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         {/* Left Column: Step List (S7.1) */}
         <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+            <Route className="h-4 w-4" />
             Decision Steps ({trace_steps.length})
           </h2>
           <div className="space-y-0">

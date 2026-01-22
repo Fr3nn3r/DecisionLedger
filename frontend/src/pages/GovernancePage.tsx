@@ -1,9 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Plus, X, Lightbulb, GitBranch, CircleDot, FileType, FileQuestion } from 'lucide-react';
 import { getProposals } from '@/data';
 import { GovernanceListSkeleton } from '@/components/shared/Skeleton';
+import { SearchInput } from '@/components/shared/SearchInput';
+import { FilterSelect } from '@/components/shared/FilterSelect';
+import { ProposalStatusBadge } from '@/components/shared/badges';
 import { formatDate, cn } from '@/lib/utils';
-import type { ProposalStatus, ProposalType, ChangeProposal } from '@/types';
+import type { ProposalType, ChangeProposal } from '@/types';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -45,27 +49,6 @@ function SortableHeader<T extends string>({
         </span>
       </span>
     </th>
-  );
-}
-
-function ProposalStatusBadge({ status }: { status: ProposalStatus }) {
-  const colorClasses: Record<ProposalStatus, string> = {
-    Draft: 'bg-secondary text-secondary-foreground',
-    'Pending Approval': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-    Approved: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-    Published: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    Rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-  };
-
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        colorClasses[status]
-      )}
-    >
-      {status}
-    </span>
   );
 }
 
@@ -202,8 +185,9 @@ export function GovernancePage() {
         <h1 className="text-2xl font-semibold">Governance</h1>
         <Link
           to="/governance/new"
-          className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
         >
+          <Plus className="h-4 w-4" />
           Create New Proposal
         </Link>
       </div>
@@ -211,50 +195,38 @@ export function GovernancePage() {
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {/* Search input */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search proposals..."
-            value={searchFilter}
-            onChange={(e) => updateFilter('q', e.target.value)}
-            className="h-9 w-56 rounded-md border border-input bg-background px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-        </div>
+        <SearchInput
+          value={searchFilter}
+          onChange={(value) => updateFilter('q', value)}
+          placeholder="Search proposals..."
+          className="w-56"
+        />
 
         {/* Status dropdown */}
-        <select
+        <FilterSelect
           value={statusFilter}
-          onChange={(e) => updateFilter('status', e.target.value)}
-          className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="">All Statuses</option>
-          {uniqueStatuses.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => updateFilter('status', value)}
+          options={uniqueStatuses}
+          placeholder="All Statuses"
+          icon={CircleDot}
+        />
 
         {/* Type dropdown */}
-        <select
+        <FilterSelect
           value={typeFilter}
-          onChange={(e) => updateFilter('type', e.target.value)}
-          className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="">All Types</option>
-          {uniqueTypes.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => updateFilter('type', value)}
+          options={uniqueTypes}
+          placeholder="All Types"
+          icon={FileType}
+        />
 
         {/* Clear filters button */}
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-input bg-background px-3 py-1 text-sm hover:bg-muted transition-colors"
           >
+            <X className="h-4 w-4" />
             Clear filters
           </button>
         )}
@@ -269,6 +241,7 @@ export function GovernancePage() {
         <table className="w-full">
           <thead className="bg-muted text-muted-foreground">
             <tr>
+              <th className="w-10 px-2 py-3"></th>
               <SortableHeader
                 label="Title"
                 sortKey="title"
@@ -300,19 +273,43 @@ export function GovernancePage() {
           <tbody className="bg-card">
             {filteredAndSortedProposals.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
-                  No proposals match your filters.{' '}
-                  <button onClick={clearFilters} className="text-primary hover:underline">
-                    Clear filters
-                  </button>
+                <td colSpan={6} className="px-4 py-12 text-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                      <FileQuestion className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium">No proposals match your filters</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Try adjusting your search or{' '}
+                        <button onClick={clearFilters} className="text-primary hover:underline">
+                          clear filters
+                        </button>
+                      </p>
+                    </div>
+                  </div>
                 </td>
               </tr>
             ) : (
               filteredAndSortedProposals.map((proposal) => (
                 <tr
                   key={proposal.proposal_id}
-                  className="border-b border-border last:border-b-0 hover:bg-muted/50"
+                  className={cn(
+                    'border-b border-border last:border-b-0 hover:bg-muted/50 border-l-4',
+                    proposal.status === 'Published' && 'border-l-green-500',
+                    proposal.status === 'Approved' && 'border-l-blue-500',
+                    proposal.status === 'Pending Approval' && 'border-l-yellow-500',
+                    proposal.status === 'Rejected' && 'border-l-red-500',
+                    proposal.status === 'Draft' && 'border-l-slate-300 dark:border-l-slate-600'
+                  )}
                 >
+                  <td className="px-2 py-3 text-center">
+                    {proposal.proposal_type === 'Interpretation' ? (
+                      <Lightbulb className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <GitBranch className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <Link
                       to={`/governance/${proposal.proposal_id}`}

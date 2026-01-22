@@ -1,11 +1,15 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Play, FileText, RotateCcw, ClipboardList, Paperclip, Receipt, History, FileKey, Calendar, CircleDot, Banknote, ExternalLink, ArrowRight } from 'lucide-react';
 import { getClaimById } from '@/data';
 import { useApp } from '@/context/AppContext';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { ClaimDetailSkeleton } from '@/components/shared/Skeleton';
+import { SectionHeader } from '@/components/shared/SectionHeader';
+import { LabeledValue } from '@/components/shared/LabeledValue';
+import { FactStatusBadge, OutcomeBadge } from '@/components/shared/badges';
 import { formatDate, formatCHF, cn } from '@/lib/utils';
-import type { Fact, Evidence, LineItem, FactStatus, DecisionStatus, Claim } from '@/types';
+import type { Fact, Evidence, LineItem, DecisionStatus, Claim } from '@/types';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -47,36 +51,6 @@ function SortableHeader<T extends string>({
         </span>
       </span>
     </th>
-  );
-}
-
-function FactStatusBadge({ status }: { status: FactStatus }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        status === 'KNOWN'
-          ? 'bg-secondary text-secondary-foreground'
-          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-      )}
-    >
-      {status}
-    </span>
-  );
-}
-
-function DecisionStatusBadge({ status }: { status: DecisionStatus }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        status === 'Approved' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-        status === 'Partial' && 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-        status === 'Denied' && 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      )}
-    >
-      {status}
-    </span>
   );
 }
 
@@ -212,22 +186,25 @@ export function ClaimDetailPage() {
             <>
               <Link
                 to={`/decision-runs/${previousRuns[0].run_id}`}
-                className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
               >
+                <FileText className="h-4 w-4" />
                 View Latest Receipt
               </Link>
               <Link
                 to={`/claims/${claim.claim_id}/decide`}
-                className="inline-flex items-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+                className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
               >
+                <RotateCcw className="h-4 w-4" />
                 Run New Decision
               </Link>
             </>
           ) : (
             <Link
               to={`/claims/${claim.claim_id}/decide`}
-              className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
+              <Play className="h-4 w-4" />
               Run Decision
             </Link>
           )}
@@ -237,28 +214,24 @@ export function ClaimDetailPage() {
       {/* Claim Info Card */}
       <div className="rounded-lg border border-border bg-card p-4">
         <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div>
-            <dt className="text-sm text-muted-foreground">Policy ID</dt>
-            <dd className="mt-1 font-medium">{claim.policy_id}</dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">Loss Date</dt>
-            <dd className="mt-1 font-medium">{formatDate(claim.loss_date)}</dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">Status</dt>
-            <dd className="mt-1 font-medium">{claim.status}</dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">Total Claimed</dt>
-            <dd className="mt-1 font-medium">{formatCHF(totalAmount)}</dd>
-          </div>
+          <LabeledValue icon={FileKey} label="Policy ID">
+            {claim.policy_id}
+          </LabeledValue>
+          <LabeledValue icon={Calendar} label="Loss Date">
+            {formatDate(claim.loss_date)}
+          </LabeledValue>
+          <LabeledValue icon={CircleDot} label="Status">
+            {claim.status}
+          </LabeledValue>
+          <LabeledValue icon={Banknote} label="Total Claimed" prominent>
+            {formatCHF(totalAmount)}
+          </LabeledValue>
         </dl>
       </div>
 
       {/* Facts Section */}
       <div>
-        <h2 className="mb-3 text-lg font-medium">Facts</h2>
+        <SectionHeader icon={ClipboardList} className="mb-3">Facts</SectionHeader>
         <div className="overflow-hidden rounded-lg border border-border">
           <table className="w-full">
             <thead className="bg-muted text-muted-foreground">
@@ -294,8 +267,10 @@ export function ClaimDetailPage() {
                 <tr
                   key={fact.fact_id}
                   className={cn(
-                    'border-b border-border last:border-b-0',
-                    fact.status === 'UNKNOWN' && 'bg-yellow-50 dark:bg-yellow-950/20'
+                    'border-b border-border last:border-b-0 border-l-4',
+                    fact.status === 'UNKNOWN'
+                      ? 'bg-yellow-50 dark:bg-yellow-950/20 border-l-yellow-500'
+                      : 'border-l-transparent'
                   )}
                 >
                   <td className="px-4 py-3 text-sm font-medium">{fact.label}</td>
@@ -315,7 +290,7 @@ export function ClaimDetailPage() {
 
       {/* Evidence Section */}
       <div>
-        <h2 className="mb-3 text-lg font-medium">Evidence</h2>
+        <SectionHeader icon={Paperclip} className="mb-3">Evidence</SectionHeader>
         <div className="overflow-hidden rounded-lg border border-border">
           <table className="w-full">
             <thead className="bg-muted text-muted-foreground">
@@ -345,9 +320,10 @@ export function ClaimDetailPage() {
                       href={ev.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-primary hover:underline"
                     >
                       View
+                      <ExternalLink className="h-3 w-3" />
                     </a>
                   </td>
                 </tr>
@@ -359,7 +335,7 @@ export function ClaimDetailPage() {
 
       {/* Line Items Section */}
       <div>
-        <h2 className="mb-3 text-lg font-medium">Line Items</h2>
+        <SectionHeader icon={Receipt} className="mb-3">Line Items</SectionHeader>
         <div className="overflow-hidden rounded-lg border border-border">
           <table className="w-full">
             <thead className="bg-muted text-muted-foreground">
@@ -401,7 +377,7 @@ export function ClaimDetailPage() {
                       {item.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right text-sm">{formatCHF(item.amount_chf)}</td>
+                  <td className="px-4 py-3 text-right text-sm tabular-nums">{formatCHF(item.amount_chf)}</td>
                 </tr>
               ))}
               {/* Total row */}
@@ -409,7 +385,7 @@ export function ClaimDetailPage() {
                 <td className="px-4 py-3 text-sm" colSpan={2}>
                   Total
                 </td>
-                <td className="px-4 py-3 text-right text-sm">{formatCHF(totalAmount)}</td>
+                <td className="px-4 py-3 text-right text-sm tabular-nums">{formatCHF(totalAmount)}</td>
               </tr>
             </tbody>
           </table>
@@ -418,10 +394,20 @@ export function ClaimDetailPage() {
 
       {/* Previous Decisions Section */}
       <div>
-        <h2 className="mb-3 text-lg font-medium">Previous Decisions</h2>
+        <SectionHeader icon={History} className="mb-3">Previous Decisions</SectionHeader>
         {previousRuns.length === 0 ? (
-          <div className="rounded-lg border border-border bg-card p-6 text-center text-muted-foreground">
-            No previous decisions for this claim.
+          <div className="rounded-lg border border-border bg-card p-8">
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                <History className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="font-medium">No previous decisions</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Run a decision to see it appear here.
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="overflow-hidden rounded-lg border border-border">
@@ -441,17 +427,18 @@ export function ClaimDetailPage() {
                     <td className="px-4 py-3 text-sm font-mono text-xs">{run.run_id}</td>
                     <td className="px-4 py-3 text-sm">{formatDate(run.timestamp)}</td>
                     <td className="px-4 py-3">
-                      <DecisionStatusBadge status={run.outcome.status} />
+                      <OutcomeBadge status={run.outcome.status} size="sm" />
                     </td>
-                    <td className="px-4 py-3 text-right text-sm font-medium">
+                    <td className="px-4 py-3 text-right text-sm font-medium tabular-nums">
                       {formatCHF(run.outcome.payout_total)}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <Link
                         to={`/decision-runs/${run.run_id}`}
-                        className="text-sm text-primary hover:underline"
+                        className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                       >
                         View Receipt
+                        <ArrowRight className="h-3 w-3" />
                       </Link>
                     </td>
                   </tr>

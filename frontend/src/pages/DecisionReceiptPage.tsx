@@ -4,28 +4,12 @@ import { useApp } from '@/context/AppContext';
 import { getClaimById } from '@/data';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { DecisionReceiptSkeleton } from '@/components/shared/Skeleton';
-import { formatCHF, formatDateTime, cn } from '@/lib/utils';
-import { FileText, GitBranch, Eye, Download } from 'lucide-react';
-import type { DecisionStatus, DecisionRun } from '@/types';
-
-function StatusBadge({ status }: { status: DecisionStatus }) {
-  const colors = {
-    Approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    Partial: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    Denied: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-  };
-
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-4 py-1.5 text-lg font-semibold',
-        colors[status]
-      )}
-    >
-      {status}
-    </span>
-  );
-}
+import { SectionHeader } from '@/components/shared/SectionHeader';
+import { LabeledValue } from '@/components/shared/LabeledValue';
+import { OutcomeBadge } from '@/components/shared/badges';
+import { formatCHF, formatDateTime } from '@/lib/utils';
+import { GitBranch, Eye, Download, Shield, ListChecks, Hash, Clock, User, Lightbulb, FileKey } from 'lucide-react';
+import type { DecisionRun } from '@/types';
 
 export function DecisionReceiptPage() {
   const { runId } = useParams<{ runId: string }>();
@@ -108,10 +92,10 @@ export function DecisionReceiptPage() {
       {/* Summary Section (S6.1) */}
       <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center justify-between mb-6">
-          <StatusBadge status={outcome.status} />
+          <OutcomeBadge status={outcome.status} size="lg" />
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Total Payout</p>
-            <p className="text-3xl font-bold">{formatCHF(outcome.payout_total)}</p>
+            <p className="text-3xl font-bold tabular-nums">{formatCHF(outcome.payout_total)}</p>
           </div>
         </div>
 
@@ -130,7 +114,7 @@ export function DecisionReceiptPage() {
                 outcome.payout_breakdown.map((item) => (
                   <tr key={item.item_id} className="border-b border-border last:border-b-0">
                     <td className="px-4 py-3 text-sm font-medium">{item.label}</td>
-                    <td className="px-4 py-3 text-right text-sm">
+                    <td className="px-4 py-3 text-right text-sm tabular-nums">
                       {formatCHF(item.covered_amount)}
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">{item.notes}</td>
@@ -146,7 +130,7 @@ export function DecisionReceiptPage() {
               {/* Deductible Row */}
               <tr className="border-t-2 border-border bg-muted/30">
                 <td className="px-4 py-3 text-sm font-medium">Deductible Applied</td>
-                <td className="px-4 py-3 text-right text-sm font-medium text-red-600 dark:text-red-400">
+                <td className="px-4 py-3 text-right text-sm font-medium text-red-600 dark:text-red-400 tabular-nums">
                   -{formatCHF(outcome.deductible_applied)}
                 </td>
                 <td className="px-4 py-3 text-sm text-muted-foreground">Standard deductible</td>
@@ -154,7 +138,7 @@ export function DecisionReceiptPage() {
               {/* Total Row */}
               <tr className="bg-muted/50 font-semibold">
                 <td className="px-4 py-3 text-sm">Net Payout</td>
-                <td className="px-4 py-3 text-right text-sm">{formatCHF(outcome.payout_total)}</td>
+                <td className="px-4 py-3 text-right text-sm tabular-nums">{formatCHF(outcome.payout_total)}</td>
                 <td className="px-4 py-3"></td>
               </tr>
             </tbody>
@@ -164,56 +148,52 @@ export function DecisionReceiptPage() {
 
       {/* Governance Block (S6.2) */}
       <div className="rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <FileText className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">Governance & Audit</h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <SectionHeader icon={Shield} className="mb-4">Governance & Audit</SectionHeader>
+        <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Run ID</p>
-            <p className="font-mono text-sm">{decisionRun.run_id}</p>
+            <LabeledValue icon={Hash} label="Run ID" mono>
+              {decisionRun.run_id}
+            </LabeledValue>
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Timestamp</p>
-            <p className="text-sm">{formatDateTime(decisionRun.timestamp)}</p>
+            <LabeledValue icon={Clock} label="Timestamp">
+              {formatDateTime(decisionRun.timestamp)}
+            </LabeledValue>
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-              Generated By
-            </p>
-            <p className="text-sm font-medium">{decisionRun.generated_by_role}</p>
+            <LabeledValue icon={User} label="Generated By">
+              {decisionRun.generated_by_role}
+            </LabeledValue>
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-              Interpretation Set
-            </p>
-            <p className="font-mono text-xs">{decisionRun.interpretation_set_id}</p>
-            <p className="text-sm font-semibold text-primary mt-1">
-              v{decisionRun.interpretation_set_version}
-            </p>
+            <LabeledValue icon={Lightbulb} label="Interpretation Set" mono>
+              <span className="block">{decisionRun.interpretation_set_id}</span>
+              <span className="text-sm font-semibold text-primary">
+                v{decisionRun.interpretation_set_version}
+              </span>
+            </LabeledValue>
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-              Assumption Set
-            </p>
-            <p className="font-mono text-xs">{decisionRun.assumption_set_id}</p>
-            <p className="text-sm font-semibold text-primary mt-1">
-              v{decisionRun.assumption_set_version}
-            </p>
+            <LabeledValue icon={GitBranch} label="Assumption Set" mono>
+              <span className="block">{decisionRun.assumption_set_id}</span>
+              <span className="text-sm font-semibold text-primary">
+                v{decisionRun.assumption_set_version}
+              </span>
+            </LabeledValue>
           </div>
           <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-              Claim ID
-            </p>
-            <p className="font-mono text-sm">{decisionRun.claim_id}</p>
+            <LabeledValue icon={FileKey} label="Claim ID" mono>
+              {decisionRun.claim_id}
+            </LabeledValue>
           </div>
-        </div>
+        </dl>
       </div>
 
       {/* Resolved Unknowns Section (S6.3) */}
       {decisionRun.resolved_assumptions.length > 0 && (
         <div className="rounded-lg border border-yellow-200 bg-yellow-50/50 dark:border-yellow-900 dark:bg-yellow-950/20 p-6">
-          <h2 className="text-lg font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
+          <h2 className="flex items-center gap-2 text-lg font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
+            <GitBranch className="h-5 w-5" />
             Resolved Assumptions ({decisionRun.resolved_assumptions.length})
           </h2>
           <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-4">
@@ -254,7 +234,10 @@ export function DecisionReceiptPage() {
       {decisionRun.trace_steps.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Key Decision Steps</h2>
+            <h2 className="flex items-center gap-2 text-lg font-semibold">
+              <ListChecks className="h-5 w-5 text-muted-foreground" />
+              Key Decision Steps
+            </h2>
             <Link
               to={`/decision-runs/${runId}/trace`}
               className="text-sm text-primary hover:underline"

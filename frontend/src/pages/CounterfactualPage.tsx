@@ -10,7 +10,7 @@ import {
 } from '@/data';
 import { runDecision } from '@/services/decisionEngine';
 import { formatCHF, formatDateTime, cn } from '@/lib/utils';
-import { ArrowLeft, GitBranch, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { ArrowLeft, GitBranch, ArrowUpRight, ArrowDownRight, Minus, Sliders, TrendingUp, FileText } from 'lucide-react';
 import type {
   ChangeType,
   DecisionStatus,
@@ -49,7 +49,7 @@ function DeltaBadge({ delta }: { delta: number }) {
 
   if (delta > 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-semibold">
+      <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-semibold tabular-nums">
         <ArrowUpRight className="h-4 w-4" />
         +{formatCHF(delta)}
       </span>
@@ -57,7 +57,7 @@ function DeltaBadge({ delta }: { delta: number }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-400 font-semibold">
+    <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-400 font-semibold tabular-nums">
       <ArrowDownRight className="h-4 w-4" />
       {formatCHF(delta)}
     </span>
@@ -277,7 +277,10 @@ export function CounterfactualPage() {
 
       {/* Base Run Info (S8.1) */}
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-lg font-semibold mb-4">Base Decision</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold mb-4">
+          <FileText className="h-5 w-5 text-muted-foreground" />
+          Base Decision
+        </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Run ID</p>
@@ -300,7 +303,10 @@ export function CounterfactualPage() {
 
       {/* Change Selector (S8.1) */}
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-lg font-semibold mb-4">Select One Change</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold mb-4">
+          <Sliders className="h-5 w-5 text-muted-foreground" />
+          Select One Change
+        </h2>
         <p className="text-sm text-muted-foreground mb-6">
           Choose whether to change an assumption resolution or an interpretation option.
           Only one change is allowed per simulation.
@@ -505,7 +511,10 @@ export function CounterfactualPage() {
       {/* Results Display (S8.2) */}
       {counterfactualResult && (
         <div className="rounded-lg border-2 border-primary bg-card p-6">
-          <h2 className="text-lg font-semibold mb-4">Counterfactual Result</h2>
+          <h2 className="flex items-center gap-2 text-lg font-semibold mb-4">
+            <TrendingUp className="h-5 w-5 text-muted-foreground" />
+            Counterfactual Result
+          </h2>
 
           {/* Summary */}
           <div className="rounded-lg bg-muted/30 p-4 mb-6">
