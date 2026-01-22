@@ -1,0 +1,978 @@
+{
+  "project": "Decision Ledger Demo",
+  "version": "1.0.0",
+  "created": "2026-01-22",
+  "updated_at": "2026-01-22",
+  "approach": "Frontend-only with fixtures (Option A) - no backend needed for MVP",
+  "progress": {
+    "completed_epics": ["E1", "E3"],
+    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1"],
+    "in_progress": [],
+    "next_up": ["S2.3", "S2.4", "S2.5", "S4.3", "S2.7a"]
+  },
+  "notes": {
+    "2026-01-22": "Project setup complete. Backend is placeholder only. Focus on frontend with fixtures. Next: populate fixtures then build Claims UI and Decision Wizard.",
+    "2026-01-22-b": "Split S2.7 (8pts) into S2.7a/b/c/d (2+2+3+2=9pts) for better manageability. Decision engine will be TypeScript frontend service.",
+    "2026-01-22-c": "S4.1 Claims List Page implemented. Table displays 10 demo claims with ID links, product line, formatted loss dates (de-CH locale), and status badges (Ready/Decided). Uses getClaimSummaries() and formatDate() utilities."
+  },
+  "tech_stack": {
+    "backend": "Python 3.9+ / FastAPI / Pydantic",
+    "frontend": "React 18 / TypeScript / Tailwind / shadcn-ui",
+    "data": "File-based JSON fixtures",
+    "theming": "@space-man/react-theme-animation"
+  },
+  "epics": [
+    {
+      "id": "E1",
+      "name": "Project Setup & Infrastructure",
+      "description": "Initialize project structure, tooling, and dependencies"
+    },
+    {
+      "id": "E2",
+      "name": "Core Data Models & Demo Engine",
+      "description": "Define data models, create fixtures, implement deterministic decision engine"
+    },
+    {
+      "id": "E3",
+      "name": "App Shell & Navigation",
+      "description": "Layout, navigation, header controls, role management"
+    },
+    {
+      "id": "E4",
+      "name": "Claims Module",
+      "description": "Claims list and detail views"
+    },
+    {
+      "id": "E5",
+      "name": "Decision Wizard",
+      "description": "Setup and assumption resolution workflow"
+    },
+    {
+      "id": "E6",
+      "name": "Decision Receipt",
+      "description": "Core decision artifact display"
+    },
+    {
+      "id": "E7",
+      "name": "Trace Viewer",
+      "description": "Step-by-step decision trace visualization"
+    },
+    {
+      "id": "E8",
+      "name": "Counterfactual Simulator",
+      "description": "What-if analysis with single-toggle changes"
+    },
+    {
+      "id": "E9",
+      "name": "QA Impact Module",
+      "description": "Batch simulation and portfolio impact view"
+    },
+    {
+      "id": "E10",
+      "name": "Governance Module",
+      "description": "Change proposals and approval workflow"
+    },
+    {
+      "id": "E11",
+      "name": "Catalogs Module",
+      "description": "Interpretations and assumptions registry"
+    },
+    {
+      "id": "E12",
+      "name": "Polish & Demo Ready",
+      "description": "Final polish, demo flow, edge cases"
+    }
+  ],
+  "stories": [
+    {
+      "id": "S1.1",
+      "epic": "E1",
+      "title": "Initialize monorepo structure",
+      "description": "Set up the project with backend (FastAPI) and frontend (React) directories with proper configuration",
+      "acceptance_criteria": [
+        "Root directory contains /backend and /frontend folders",
+        "Backend has pyproject.toml or requirements.txt with FastAPI, Pydantic, uvicorn",
+        "Frontend has package.json with React 18, TypeScript, Vite, Tailwind",
+        "README.md with setup instructions exists",
+        ".gitignore configured for Python and Node"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S1.2",
+      "epic": "E1",
+      "title": "Configure Tailwind with shadcn/ui",
+      "description": "Set up Tailwind CSS with shadcn/ui component library and theming support",
+      "acceptance_criteria": [
+        "Tailwind configured with CSS variables for theming",
+        "shadcn/ui initialized with required components (Button, Card, Table, Dialog, etc.)",
+        "CSS variables from theming-standalone.md implemented",
+        "Dark mode class strategy configured",
+        "@space-man/react-theme-animation installed and provider set up"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S1.3",
+      "epic": "E1",
+      "title": "Set up FastAPI backend with CORS",
+      "description": "Create FastAPI application with proper CORS configuration and health endpoint",
+      "acceptance_criteria": [
+        "FastAPI app runs on port 8000",
+        "CORS configured for local development (localhost:5173)",
+        "Health check endpoint at GET /health returns {status: 'ok'}",
+        "Hot reload works in development"
+      ],
+      "priority": 1,
+      "story_points": 2
+    },
+    {
+      "id": "S1.4",
+      "epic": "E1",
+      "title": "Configure React Router for SPA navigation",
+      "description": "Set up client-side routing with React Router for all application routes",
+      "acceptance_criteria": [
+        "React Router v6 installed and configured",
+        "Routes defined for: /claims, /claims/:id, /decision-runs, /qa-impact, /governance, /catalogs",
+        "404 fallback route implemented",
+        "Navigation preserves state on route changes"
+      ],
+      "priority": 1,
+      "story_points": 2
+    },
+    {
+      "id": "S2.1",
+      "epic": "E2",
+      "title": "Define Pydantic models for core data types",
+      "description": "Create Pydantic models for Claim, InterpretationSet, AssumptionSet, DecisionRun, CounterfactualRun, QAStudyResult",
+      "acceptance_criteria": [
+        "Claim model with claim_id, jurisdiction, product_line, loss_date, policy_id, facts, evidence, line_items",
+        "Fact model with fact_id, label, value, status (KNOWN|UNKNOWN), source",
+        "Evidence model with evidence_id, label, type, url",
+        "LineItem model with item_id, label, amount_chf, category",
+        "InterpretationSet model with decision_points array",
+        "AssumptionSet model with assumptions array including triggers, alternatives, risk_tier, allowed_roles",
+        "DecisionRun model with resolved_assumptions, selected_interpretations, outcome, trace_steps",
+        "CounterfactualRun model with base_run_id, change_type, change_ref, new_outcome, delta",
+        "QAStudyResult model with cohort_id, proposal_id, impacted_claims_count, total_delta_payout"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S2.2",
+      "epic": "E2",
+      "title": "Create TypeScript interfaces mirroring backend models",
+      "description": "Define TypeScript types/interfaces in frontend that match backend Pydantic models",
+      "acceptance_criteria": [
+        "All backend models have corresponding TypeScript interfaces",
+        "Types exported from a central types/ directory",
+        "Enums defined for status values (KNOWN, UNKNOWN, etc.)",
+        "Types are strict (no 'any' types)"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S2.3",
+      "epic": "E2",
+      "title": "Create CH Motor claim fixtures (10 claims)",
+      "description": "Create JSON fixture file with 10 Swiss Motor/Casco claims including the primary demo claim with tow bar scenario",
+      "acceptance_criteria": [
+        "claims.json contains exactly 10 claims",
+        "All claims have jurisdiction='CH' and product_line='Motor/Casco'",
+        "Primary claim (CLM-CH-001) has: rear-end collision, tow bar damage, accessory_declared=UNKNOWN fact",
+        "Claims have varied loss_dates within last 180 days",
+        "Each claim has 4-6 facts, 2-3 evidence items, 2-4 line items",
+        "Mix of claim statuses: some 'Ready', some 'Decided'",
+        "Amounts in CHF, realistic values (500-15000 range)"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S2.4",
+      "epic": "E2",
+      "title": "Create interpretation sets fixture",
+      "description": "Create JSON fixture for CH Motor interpretation sets with ACCESSORY_COVERAGE decision point",
+      "acceptance_criteria": [
+        "interpretation_sets.json contains at least 2 versions (2025.1, 2025.2)",
+        "ACCESSORY_COVERAGE decision point with options: INCLUDED_IF_DECLARED, INCLUDED_BY_DEFAULT, EXCLUDED",
+        "Each option has clear label and maps to deterministic effect",
+        "Sets have jurisdiction, product_line, effective_from, version, status fields",
+        "One set is status='Approved' (active), one is status='Draft'"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S2.5",
+      "epic": "E2",
+      "title": "Create assumption sets fixture",
+      "description": "Create JSON fixture for CH Motor assumption sets with accessory_declared assumption",
+      "acceptance_criteria": [
+        "assumption_sets.json contains at least 2 versions",
+        "ACCESSORY_DECLARED assumption triggers when fact status=UNKNOWN",
+        "Alternatives: ASSUME_DECLARED (if invoice exists), ASSUME_NOT_DECLARED (conservative)",
+        "Risk tier assigned (Low/Med/High)",
+        "allowed_roles defined: some alternatives require Supervisor+",
+        "Recommended resolution marked"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S2.6",
+      "epic": "E2",
+      "title": "Create pre-computed QA study results fixture",
+      "description": "Create JSON fixture with pre-computed QA simulation results for cohort analysis",
+      "acceptance_criteria": [
+        "qa_results.json contains 2-3 pre-computed study results",
+        "Each result tied to a cohort (CH Motor accessory damage last 180 days)",
+        "Each result tied to a proposed change (interpretation or assumption change)",
+        "Contains impacted_claims_count, total_delta_payout, top_impacted_claims list",
+        "One result includes INCONSISTENCY_DETECTED flag for demo"
+      ],
+      "priority": 2,
+      "story_points": 3
+    },
+    {
+      "id": "S2.7a",
+      "epic": "E2",
+      "title": "Decision engine types and core structure",
+      "description": "Define TypeScript types and create the core decision engine module structure",
+      "acceptance_criteria": [
+        "DecisionEngineInput type: claim, interpretation_set, assumption_set, resolved_assumptions, selected_interpretations",
+        "DecisionEngineOutput type: run_id, timestamp, outcome (approved, payout_total, payout_breakdown), trace_steps",
+        "Create engine module at frontend/src/services/decisionEngine.ts",
+        "Main runDecision(input: DecisionEngineInput): DecisionEngineOutput function signature",
+        "Unit test scaffolding with Vitest",
+        "Same inputs always produce identical outputs (deterministic by design)"
+      ],
+      "priority": 1,
+      "story_points": 2,
+      "depends_on": []
+    },
+    {
+      "id": "S2.7b",
+      "epic": "E2",
+      "title": "Decision engine base coverage and deductible logic",
+      "description": "Implement logic for always-covered line items and deductible application",
+      "acceptance_criteria": [
+        "Line items with category 'base_repair' are always covered",
+        "Standard deductible of 500 CHF applied to total",
+        "Calculate payout_total as sum of covered items minus deductible",
+        "Generate payout_breakdown showing each covered item",
+        "Works correctly for simple claims with no UNKNOWN facts",
+        "Unit tests for base coverage scenarios"
+      ],
+      "priority": 1,
+      "story_points": 2,
+      "depends_on": ["S2.7a"]
+    },
+    {
+      "id": "S2.7c",
+      "epic": "E2",
+      "title": "Decision engine interpretation and assumption resolution",
+      "description": "Implement accessory coverage logic based on interpretations and resolved assumptions",
+      "acceptance_criteria": [
+        "ACCESSORY_COVERAGE interpretation with 3 options: INCLUDED_IF_DECLARED, INCLUDED_BY_DEFAULT, EXCLUDED",
+        "accessory_declared assumption resolution: DECLARED or NOT_DECLARED",
+        "Accessory line items covered/excluded based on interpretation + assumption combination",
+        "INCLUDED_IF_DECLARED + DECLARED = covered, INCLUDED_IF_DECLARED + NOT_DECLARED = excluded",
+        "INCLUDED_BY_DEFAULT = always covered, EXCLUDED = never covered",
+        "CH Motor demo scenario (tow bar) works correctly end-to-end",
+        "Unit tests for all interpretation/assumption combinations"
+      ],
+      "priority": 1,
+      "story_points": 3,
+      "depends_on": ["S2.7b"]
+    },
+    {
+      "id": "S2.7d",
+      "epic": "E2",
+      "title": "Decision engine trace step generation",
+      "description": "Generate detailed trace steps showing the decision flow for audit purposes",
+      "acceptance_criteria": [
+        "Generate trace_steps array as part of DecisionEngineOutput",
+        "Each TraceStep has: step_id, label, inputs_used, output, rule_ref, evidence_refs",
+        "Trace captures which facts were evaluated",
+        "Trace shows which assumptions were applied and why",
+        "Trace shows which interpretation affected the outcome",
+        "Steps are ordered chronologically as decisions were made",
+        "Unit tests verify trace accuracy for demo scenario"
+      ],
+      "priority": 1,
+      "story_points": 2,
+      "depends_on": ["S2.7c"]
+    },
+    {
+      "id": "S2.8",
+      "epic": "E2",
+      "title": "Implement counterfactual engine",
+      "description": "Extend decision engine to compute counterfactual outcomes with exactly one change",
+      "acceptance_criteria": [
+        "Takes base DecisionRun and exactly one change (assumption OR interpretation)",
+        "Computes new_outcome and delta from base",
+        "Generates trace_diff showing which step(s) changed",
+        "Enforces single-change constraint at engine level"
+      ],
+      "priority": 2,
+      "story_points": 5
+    },
+    {
+      "id": "S2.9",
+      "epic": "E2",
+      "title": "Create FastAPI endpoints for fixtures",
+      "description": "Create REST endpoints to serve fixture data to frontend",
+      "acceptance_criteria": [
+        "GET /api/claims returns all claims",
+        "GET /api/claims/{claim_id} returns single claim",
+        "GET /api/interpretation-sets returns all interpretation sets",
+        "GET /api/assumption-sets returns all assumption sets",
+        "GET /api/qa-results returns all QA study results",
+        "Endpoints return proper error responses (404 for not found)"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S2.10",
+      "epic": "E2",
+      "title": "Create FastAPI endpoints for decision operations",
+      "description": "Create REST endpoints for running decisions and counterfactuals",
+      "acceptance_criteria": [
+        "POST /api/decisions/run accepts claim_id, interpretation_set_id, assumption_set_id, resolved_assumptions, selected_interpretations",
+        "Returns DecisionRun with run_id, timestamp, outcome, trace_steps",
+        "POST /api/decisions/counterfactual accepts base_run_id and single change",
+        "Returns CounterfactualRun with delta and trace_diff",
+        "GET /api/decisions/{run_id} returns stored decision run"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S3.1",
+      "epic": "E3",
+      "title": "Implement app shell with sidebar navigation",
+      "description": "Create the main application layout with collapsible left sidebar navigation",
+      "acceptance_criteria": [
+        "Left sidebar with navigation links: Claims, Decision Runs, QA Impact, Governance, Catalogs",
+        "Sidebar shows active route highlighted",
+        "Sidebar can collapse to icons only (optional but nice)",
+        "Main content area fills remaining space",
+        "Responsive: sidebar collapses on mobile",
+        "Uses semantic Tailwind classes (bg-sidebar, text-sidebar-foreground, etc.)"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S3.2",
+      "epic": "E3",
+      "title": "Implement persistent header with role selector",
+      "description": "Create header bar with role selector dropdown and demo controls",
+      "acceptance_criteria": [
+        "Header spans full width above content",
+        "Role selector dropdown with: Adjuster, Supervisor, QA Lead, Policy Owner",
+        "Selected role stored in React context and persists across navigation",
+        "Role displayed with appropriate styling/icon",
+        "Header includes app title/logo area"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S3.3",
+      "epic": "E3",
+      "title": "Implement theme toggle in header",
+      "description": "Add theme popover component to header for color theme and dark/light mode switching",
+      "acceptance_criteria": [
+        "Theme toggle button in header (palette icon)",
+        "Popover shows 3 color themes: Northern Lights, Default, Pink",
+        "Popover shows 3 modes: Light, Dark, System",
+        "Theme changes trigger 500ms circular reveal animation",
+        "Selection persists in localStorage"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S3.4",
+      "epic": "E3",
+      "title": "Implement Reset Demo Data control",
+      "description": "Add reset button that restores all fixtures and clears local state",
+      "acceptance_criteria": [
+        "Reset Demo Data button in header",
+        "Clicking shows confirmation dialog",
+        "On confirm: clears all decision runs from memory, resets any published changes",
+        "Shows success toast notification",
+        "Navigates to /claims after reset"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S3.5",
+      "epic": "E3",
+      "title": "Implement Demo Mode indicator",
+      "description": "Add persistent visual indicator that this is demo mode",
+      "acceptance_criteria": [
+        "Badge/chip in header shows 'Demo Mode'",
+        "Styled distinctively (e.g., primary color background)",
+        "Non-interactive, purely informational"
+      ],
+      "priority": 3,
+      "story_points": 1
+    },
+    {
+      "id": "S3.6",
+      "epic": "E3",
+      "title": "Implement breadcrumb navigation",
+      "description": "Add contextual breadcrumbs below header showing navigation path",
+      "acceptance_criteria": [
+        "Breadcrumbs show current location path (e.g., Claims > CLM-CH-001 > Decision)",
+        "Each segment is clickable to navigate back",
+        "Updates automatically based on current route",
+        "Styled consistently with shadcn patterns"
+      ],
+      "priority": 2,
+      "story_points": 3
+    },
+    {
+      "id": "S3.7",
+      "epic": "E3",
+      "title": "Create React context for app state",
+      "description": "Set up React context for global state: current role, decision runs, demo data state",
+      "acceptance_criteria": [
+        "AppContext provides: currentRole, setCurrentRole",
+        "Provides: decisionRuns array, addDecisionRun function",
+        "Provides: resetDemoData function",
+        "Context persists across route changes",
+        "TypeScript types for all context values"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S4.1",
+      "epic": "E4",
+      "title": "Implement Claims List screen",
+      "description": "Create the claims list view as the main entry point to the application",
+      "acceptance_criteria": [
+        "Table displays: claim_id, jurisdiction, product_line, loss_date, status",
+        "Loading skeleton shown while fetching",
+        "Clicking row navigates to Claim Detail",
+        "Optional 'Open Latest Receipt' button if claim has decision run",
+        "Loads in <1s from fixtures"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S4.2",
+      "epic": "E4",
+      "title": "Add filtering to Claims List",
+      "description": "Add quick filters for jurisdiction and product_line, plus claim_id search",
+      "acceptance_criteria": [
+        "Dropdown filter for jurisdiction (shows unique values from data)",
+        "Dropdown filter for product_line (shows unique values)",
+        "Text search input for claim_id (filters as you type)",
+        "Filters combine with AND logic",
+        "Clear filters button resets all",
+        "Filter state preserved on navigation back"
+      ],
+      "priority": 2,
+      "story_points": 3
+    },
+    {
+      "id": "S4.3",
+      "epic": "E4",
+      "title": "Implement Claim Detail screen",
+      "description": "Create the claim detail view showing facts, evidence, and line items",
+      "acceptance_criteria": [
+        "Header section: claim_id, policy_id, jurisdiction, loss_date",
+        "Facts table: Label, Value, Status (KNOWN/UNKNOWN), Source",
+        "UNKNOWN facts visually highlighted (e.g., warning badge, yellow background)",
+        "Evidence list with clickable links (opens in new tab)",
+        "Line items table with amounts in CHF",
+        "Primary CTA button: 'Run Decision'"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S4.4",
+      "epic": "E4",
+      "title": "Add previous decisions section to Claim Detail",
+      "description": "Show list of previous decision runs for this claim if any exist",
+      "acceptance_criteria": [
+        "Section shows 'Previous Decisions' if any runs exist for claim",
+        "Lists run_id, timestamp, outcome (Approved/Denied), payout_total",
+        "Clicking opens that Decision Receipt",
+        "Shows 'No previous decisions' message if none exist"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S5.1",
+      "epic": "E5",
+      "title": "Implement Decision Wizard: Setup step",
+      "description": "Create the first step of the decision wizard showing governance/versioning",
+      "acceptance_criteria": [
+        "Shows interpretation set: auto-selected based on claim jurisdiction/product_line/loss_date",
+        "Shows assumption set: auto-selected similarly",
+        "Displays version, effective_from, status for each set",
+        "Sets displayed as read-only cards with prominent version numbers",
+        "'Continue' button advances to Resolve Assumptions step"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S5.2",
+      "epic": "E5",
+      "title": "Implement Decision Wizard: Resolve Assumptions step",
+      "description": "Create the assumption resolution step - the core value demonstration",
+      "acceptance_criteria": [
+        "Only triggered assumptions shown (based on claim's UNKNOWN facts)",
+        "Each assumption shows: what's unknown, risk tier badge",
+        "Radio buttons for resolution options with recommended pre-selected",
+        "Non-recommended selection requires 'Reason' text input",
+        "'Generate Decision' button creates run and navigates to receipt"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S5.3",
+      "epic": "E5",
+      "title": "Implement role-based assumption restrictions",
+      "description": "Enforce allowed_roles on assumption alternatives based on current role",
+      "acceptance_criteria": [
+        "Alternatives not allowed for current role are disabled",
+        "Disabled options show tooltip: 'Requires Supervisor' (or appropriate role)",
+        "If Adjuster selects restricted option, show 'Request Escalation' action",
+        "'Request Escalation' shows modal explaining escalation (mock) OR switches role to Supervisor in demo"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S5.4",
+      "epic": "E5",
+      "title": "Implement wizard stepper UI",
+      "description": "Add step indicator showing wizard progress",
+      "acceptance_criteria": [
+        "Stepper shows: 1. Setup, 2. Resolve Assumptions, 3. Complete",
+        "Current step highlighted",
+        "Completed steps show checkmark",
+        "Can navigate back to previous steps"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S6.1",
+      "epic": "E6",
+      "title": "Implement Decision Receipt: Summary section",
+      "description": "Create the top summary area of the decision receipt",
+      "acceptance_criteria": [
+        "Large decision status: Approved / Partial / Denied with appropriate color",
+        "Total payout displayed prominently (CHF X,XXX)",
+        "Breakdown table: Item, Covered Amount, Notes",
+        "Deductible shown as separate line"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S6.2",
+      "epic": "E6",
+      "title": "Implement Decision Receipt: Governance block",
+      "description": "Add the governance/audit information block to receipt",
+      "acceptance_criteria": [
+        "Shows interpretation_set_id + version",
+        "Shows assumption_set_id + version",
+        "Shows run_id + timestamp",
+        "Shows role that generated the decision",
+        "Styled as distinct card/section"
+      ],
+      "priority": 1,
+      "story_points": 2
+    },
+    {
+      "id": "S6.3",
+      "epic": "E6",
+      "title": "Implement Decision Receipt: Resolved unknowns section",
+      "description": "Show how unknown facts were resolved via assumptions",
+      "acceptance_criteria": [
+        "Lists each resolved assumption",
+        "Shows: Unknown fact -> Assumption applied -> Chosen by (role) -> Reason (if any)",
+        "Styled distinctively to highlight the intervention"
+      ],
+      "priority": 1,
+      "story_points": 2
+    },
+    {
+      "id": "S6.4",
+      "epic": "E6",
+      "title": "Implement Decision Receipt: Decisive steps preview",
+      "description": "Show abbreviated trace of key decision steps",
+      "acceptance_criteria": [
+        "Shows top 3 trace steps that affected coverage/payout",
+        "Each step shows: step label, rule reference, evidence reference (link)",
+        "At least one evidence link and one rule reference visible",
+        "'View Full Trace' link to open Trace Viewer"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S6.5",
+      "epic": "E6",
+      "title": "Implement Decision Receipt: Action buttons",
+      "description": "Add action buttons for counterfactual, trace, and export",
+      "acceptance_criteria": [
+        "'Simulate Alternative' button navigates to Counterfactual Simulator",
+        "'View Full Trace' button navigates to Trace Viewer",
+        "'Export Receipt (PDF)' button shows toast: 'PDF export coming soon' (stub)"
+      ],
+      "priority": 1,
+      "story_points": 2
+    },
+    {
+      "id": "S7.1",
+      "epic": "E7",
+      "title": "Implement Trace Viewer: Step list",
+      "description": "Create the vertical stepper showing all trace steps",
+      "acceptance_criteria": [
+        "Vertical stepper UI with Step 1..N",
+        "Each step shows title/label",
+        "Clicking step selects it and shows details",
+        "Visual connector lines between steps"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S7.2",
+      "epic": "E7",
+      "title": "Implement Trace Viewer: Step details panel",
+      "description": "Create the details panel showing selected step information",
+      "acceptance_criteria": [
+        "Shows inputs used: facts and their values (including assumed values)",
+        "Shows decision point or assumption applied if relevant",
+        "Shows output: result of this step (e.g., 'Tow bar covered: No')",
+        "Shows evidence refs as clickable links",
+        "Shows rule refs with ID"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S7.3",
+      "epic": "E7",
+      "title": "Add trace consistency indicator",
+      "description": "Show that trace is deterministic and reproducible",
+      "acceptance_criteria": [
+        "Header shows: 'Trace for Run {run_id}'",
+        "Shows timestamp of run",
+        "'Re-run with same inputs would produce identical trace' note"
+      ],
+      "priority": 3,
+      "story_points": 1
+    },
+    {
+      "id": "S8.1",
+      "epic": "E8",
+      "title": "Implement Counterfactual Simulator: Change selector",
+      "description": "Create UI for selecting exactly one change to simulate",
+      "acceptance_criteria": [
+        "Shows base run info (run_id, original outcome)",
+        "Radio group: 'Change Type' with Assumption / Interpretation options",
+        "Based on selection, shows appropriate dropdown to pick which item to change",
+        "For assumptions: shows alternatives for each resolved assumption",
+        "For interpretations: shows alternative options for each decision point",
+        "Only one change allowed - UI enforces this constraint"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S8.2",
+      "epic": "E8",
+      "title": "Implement Counterfactual Simulator: Results display",
+      "description": "Show counterfactual outcome and delta",
+      "acceptance_criteria": [
+        "Shows new payout amount prominently",
+        "Shows delta vs base (e.g., '+CHF 1,200' or '-CHF 500') with color coding",
+        "'What changed' one-liner summary",
+        "Trace diff: highlights which step changed (e.g., 'Step 4 changed outcome')"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S8.3",
+      "epic": "E8",
+      "title": "Implement instant counterfactual updates",
+      "description": "Make counterfactual results update instantly on change",
+      "acceptance_criteria": [
+        "Results update immediately when selection changes",
+        "No 'Submit' button needed - reactive updates",
+        "Loading state shown briefly during calculation",
+        "Delta animation on value change (optional)"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S8.4",
+      "epic": "E8",
+      "title": "Add counterfactual actions",
+      "description": "Add action buttons for saving and navigation",
+      "acceptance_criteria": [
+        "'Save as Counterfactual Run' stores the run for reference",
+        "'Return to Receipt' navigates back to base receipt",
+        "Saved counterfactuals appear in Decision Runs list (optional)"
+      ],
+      "priority": 3,
+      "story_points": 2
+    },
+    {
+      "id": "S9.1",
+      "epic": "E9",
+      "title": "Implement QA Impact: Cohort and proposal selectors",
+      "description": "Create the input selectors for QA simulation",
+      "acceptance_criteria": [
+        "Cohort dropdown with pre-defined options (e.g., 'CH Motor - accessory damage - last 180 days')",
+        "Proposed change dropdown showing available changes (interpretation or assumption changes)",
+        "'Run QA Simulation' button (even though results are pre-computed)",
+        "Button triggers loading state briefly then shows results"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S9.2",
+      "epic": "E9",
+      "title": "Implement QA Impact: Results dashboard",
+      "description": "Show the impact metrics and headline numbers",
+      "acceptance_criteria": [
+        "Large headline metrics: impacted claims count, total delta payout (CHF)",
+        "Metrics styled as prominent cards/tiles",
+        "Optional flag box shows 'Inconsistency detected' warning if present in data"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S9.3",
+      "epic": "E9",
+      "title": "Implement QA Impact: Top impacted claims list",
+      "description": "Show list of most impacted claims from the study",
+      "acceptance_criteria": [
+        "Table shows claim_id and delta amount",
+        "Sorted by absolute delta (highest impact first)",
+        "Clicking claim navigates to that claim's receipt or counterfactual view",
+        "Shows 'View all impacted claims' if list is truncated"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S9.4",
+      "epic": "E9",
+      "title": "Add Create Change Proposal action from QA Impact",
+      "description": "Allow creating a governance proposal from QA results",
+      "acceptance_criteria": [
+        "'Create Change Proposal' button at bottom of results",
+        "Navigates to Governance screen with proposal pre-filled",
+        "Pre-fills: proposal type, proposed change, QA impact summary"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S10.1",
+      "epic": "E10",
+      "title": "Implement Governance: Proposal list",
+      "description": "Create list view showing all change proposals",
+      "acceptance_criteria": [
+        "Table shows: proposal title, type, status, created date",
+        "Status options: Draft, Pending Approval, Approved, Published",
+        "Clicking row opens proposal detail",
+        "'Create New Proposal' button"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S10.2",
+      "epic": "E10",
+      "title": "Implement Governance: Proposal form",
+      "description": "Create form for creating/editing change proposals",
+      "acceptance_criteria": [
+        "Fields: title, type (Assumption/Interpretation), proposed version bump, rationale (text area)",
+        "Embedded QA impact summary if created from QA screen",
+        "Approval steps shown (mock): Claims Ops -> Legal -> Policy Owner",
+        "'Submit for Approval' button changes status to Pending"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S10.3",
+      "epic": "E10",
+      "title": "Implement role-gated governance actions",
+      "description": "Control governance actions based on current role",
+      "acceptance_criteria": [
+        "Only Policy Owner can see 'Approve' button on pending proposals",
+        "Only Policy Owner can 'Publish new version'",
+        "Other roles see disabled buttons with tooltip explaining required role",
+        "Adjuster/Supervisor can only create and submit proposals"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S10.4",
+      "epic": "E10",
+      "title": "Implement publish behavior (demo magic)",
+      "description": "Make publishing a proposal affect subsequent decision runs",
+      "acceptance_criteria": [
+        "Publishing updates the 'active' interpretation or assumption set in app state",
+        "New decision runs auto-select the newly published version",
+        "Visual confirmation: toast shows 'Version 2025.2 is now active'",
+        "Re-running a claim shows new default applied"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S11.1",
+      "epic": "E11",
+      "title": "Implement Catalogs: Interpretations tab",
+      "description": "Create read-only catalog view of interpretation sets",
+      "acceptance_criteria": [
+        "Tab navigation: Interpretations | Assumptions",
+        "Lists all decision points with: label, current default option, all options",
+        "Shows owner, status, effective date, version for each set",
+        "Expandable rows to see all options for a decision point"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S11.2",
+      "epic": "E11",
+      "title": "Implement Catalogs: Assumptions tab",
+      "description": "Create read-only catalog view of assumption sets",
+      "acceptance_criteria": [
+        "Lists all assumptions with: label, trigger condition, risk tier badge",
+        "Shows recommended resolution and all alternatives",
+        "Shows allowed_roles for each alternative",
+        "Expandable rows for full details"
+      ],
+      "priority": 1,
+      "story_points": 3
+    },
+    {
+      "id": "S11.3",
+      "epic": "E11",
+      "title": "Add Draft Proposal action from Catalogs",
+      "description": "Allow initiating a proposal from catalog items",
+      "acceptance_criteria": [
+        "'Draft Proposal' button on interpretation/assumption items",
+        "Navigates to Governance form pre-filled with item reference",
+        "Only visible for appropriate roles (not read-only users)"
+      ],
+      "priority": 3,
+      "story_points": 2
+    },
+    {
+      "id": "S12.1",
+      "epic": "E12",
+      "title": "Implement loading states and skeletons",
+      "description": "Add proper loading states to all data-fetching screens",
+      "acceptance_criteria": [
+        "Claims list shows skeleton rows while loading",
+        "Claim detail shows skeleton sections",
+        "Decision receipt shows skeleton",
+        "Loading states feel realistic even with fast local data"
+      ],
+      "priority": 2,
+      "story_points": 3
+    },
+    {
+      "id": "S12.2",
+      "epic": "E12",
+      "title": "Implement error states",
+      "description": "Add friendly error handling throughout the app",
+      "acceptance_criteria": [
+        "404 page for invalid routes",
+        "Claim not found error state",
+        "'No approved interpretation set found' error (edge case)",
+        "Network error handling with retry option"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S12.3",
+      "epic": "E12",
+      "title": "Add toast notifications",
+      "description": "Implement toast notification system for user feedback",
+      "acceptance_criteria": [
+        "Success toasts: Decision generated, Proposal submitted, Demo data reset",
+        "Error toasts: Operation failed messages",
+        "Toasts auto-dismiss after 3-5 seconds",
+        "Toasts don't block interaction"
+      ],
+      "priority": 2,
+      "story_points": 2
+    },
+    {
+      "id": "S12.4",
+      "epic": "E12",
+      "title": "Verify complete demo flow works end-to-end",
+      "description": "Test the full 8-12 minute demo script from PRD",
+      "acceptance_criteria": [
+        "Flow 1 (Adjuster run): Claims -> CH claim -> Run Decision -> Receipt works",
+        "Flow 2 (Counterfactual): Simulate Alternative shows delta correctly",
+        "Flow 3 (QA/Leakage): QA Impact shows cohort results, drill-down works",
+        "Flow 4 (Governance): Create proposal -> Publish -> Re-run shows new default",
+        "CH claim decidable end-to-end in <60 seconds"
+      ],
+      "priority": 1,
+      "story_points": 5
+    },
+    {
+      "id": "S12.5",
+      "epic": "E12",
+      "title": "Final UI polish pass",
+      "description": "Review and polish all screens for professional appearance",
+      "acceptance_criteria": [
+        "Consistent spacing and typography throughout",
+        "All screens have clear titles",
+        "No dead ends - every page has primary CTA",
+        "Empty states have appropriate messaging",
+        "Colors and theming consistent"
+      ],
+      "priority": 2,
+      "story_points": 3
+    }
+  ],
+  "summary": {
+    "total_stories": 50,
+    "total_story_points": 149,
+    "priority_1_stories": 33,
+    "priority_2_stories": 13,
+    "priority_3_stories": 4,
+    "epics_count": 12
+  }
+}

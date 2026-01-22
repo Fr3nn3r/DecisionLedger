@@ -538,13 +538,3 @@ A build is “demo-ready” when:
    * qa_results.json (optional if you compute it client-side)
 3. Demo engine module (deterministic functions)
 4. Demo script (the flow above) embedded as “Demo Guide” (optional)
-
----
-
-## If you want, I can also produce:
-
-* A **complete fixture JSON pack** (CH + US) with realistic IDs, versions, trace steps, and precomputed outcomes
-* The **exact field labels** for each screen (so there’s zero ambiguity for dev)
-* A “golden path” + “edge case path” (e.g., insufficient evidence triggers “Request evidence” instead of decision)
-
-Tell me whether you want the secondary US scenario included in the clickable demo flow or just present as extra data in the claim list, and I’ll lock the fixtures and write them out.
