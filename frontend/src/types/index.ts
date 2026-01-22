@@ -237,10 +237,15 @@ export interface QAProposedChange {
   proposal_id: string;
   label: string;
   description: string;
-  change_type: string;
+  change_type: ChangeType;
+  target_set_id: string;
+  target_item_id: string;
+  from_value: string;
+  to_value: string;
 }
 
 export interface QAStudyResult {
+  study_id: string;
   cohort_id: string;
   cohort_label: string;
   proposal_id: string;
@@ -249,4 +254,13 @@ export interface QAStudyResult {
   total_delta_payout: number;
   top_impacted_claims: ImpactedClaim[];
   flags: QAFlag[];
+  summary: string;
+  inconsistency_detail?: string;
+  run_date: string;
+}
+
+export interface QAResultsData {
+  cohorts: QACohort[];
+  proposed_changes: QAProposedChange[];
+  study_results: QAStudyResult[];
 }
