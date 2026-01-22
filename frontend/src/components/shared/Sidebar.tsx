@@ -7,6 +7,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import trueaimLogo from '@/assets/trueaim-logo.png';
 
 const navItems = [
   { to: '/claims', label: 'Claims', icon: FileText },
@@ -20,7 +21,8 @@ export function Sidebar() {
   return (
     <aside className="flex w-64 flex-col border-r border-sidebar-border bg-sidebar">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-sidebar-border px-6">
+      <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
+        <img src={trueaimLogo} alt="TrueAim" className="h-8 w-auto" />
         <span className="text-lg font-semibold text-sidebar-foreground">
           Decision Ledger
         </span>
