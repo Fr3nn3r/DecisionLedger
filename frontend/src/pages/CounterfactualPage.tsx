@@ -314,48 +314,57 @@ export function CounterfactualPage() {
 
         {/* Change Type Radio */}
         <div className="flex gap-4 mb-6">
-          <label
-            className={cn(
-              'flex-1 cursor-pointer rounded-lg border-2 p-4 transition-colors',
-              changeType === 'ASSUMPTION'
-                ? 'border-primary bg-primary/5'
-                : 'border-border hover:border-muted-foreground/50'
-            )}
-          >
-            <input
-              type="radio"
-              name="changeType"
-              value="ASSUMPTION"
-              checked={changeType === 'ASSUMPTION'}
-              onChange={() => handleChangeTypeSelect('ASSUMPTION')}
-              className="sr-only"
-            />
-            <div className="font-medium mb-1">Change Assumption</div>
-            <div className="text-sm text-muted-foreground">
-              Modify how an unknown fact was resolved ({availableAssumptions.length} available)
+          {availableAssumptions.length > 0 && (
+            <label
+              className={cn(
+                'flex-1 cursor-pointer rounded-lg border-2 p-4 transition-colors',
+                changeType === 'ASSUMPTION'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-muted-foreground/50'
+              )}
+            >
+              <input
+                type="radio"
+                name="changeType"
+                value="ASSUMPTION"
+                checked={changeType === 'ASSUMPTION'}
+                onChange={() => handleChangeTypeSelect('ASSUMPTION')}
+                className="sr-only"
+              />
+              <div className="font-medium mb-1">Change Assumption</div>
+              <div className="text-sm text-muted-foreground">
+                Modify how an unknown fact was resolved ({availableAssumptions.length} available)
+              </div>
+            </label>
+          )}
+          {availableInterpretations.length > 0 && (
+            <label
+              className={cn(
+                'flex-1 cursor-pointer rounded-lg border-2 p-4 transition-colors',
+                changeType === 'INTERPRETATION'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-muted-foreground/50'
+              )}
+            >
+              <input
+                type="radio"
+                name="changeType"
+                value="INTERPRETATION"
+                checked={changeType === 'INTERPRETATION'}
+                onChange={() => handleChangeTypeSelect('INTERPRETATION')}
+                className="sr-only"
+              />
+              <div className="font-medium mb-1">Change Interpretation</div>
+              <div className="text-sm text-muted-foreground">
+                Modify a policy decision point option ({availableInterpretations.length} available)
+              </div>
+            </label>
+          )}
+          {availableAssumptions.length === 0 && availableInterpretations.length === 0 && (
+            <div className="flex-1 rounded-lg border-2 border-dashed border-border p-4 text-center text-muted-foreground">
+              No assumptions or interpretations available to change for this decision.
             </div>
-          </label>
-          <label
-            className={cn(
-              'flex-1 cursor-pointer rounded-lg border-2 p-4 transition-colors',
-              changeType === 'INTERPRETATION'
-                ? 'border-primary bg-primary/5'
-                : 'border-border hover:border-muted-foreground/50'
-            )}
-          >
-            <input
-              type="radio"
-              name="changeType"
-              value="INTERPRETATION"
-              checked={changeType === 'INTERPRETATION'}
-              onChange={() => handleChangeTypeSelect('INTERPRETATION')}
-              className="sr-only"
-            />
-            <div className="font-medium mb-1">Change Interpretation</div>
-            <div className="text-sm text-muted-foreground">
-              Modify a policy decision point option ({availableInterpretations.length} available)
-            </div>
-          </label>
+          )}
         </div>
 
         {/* Assumption Selection */}
