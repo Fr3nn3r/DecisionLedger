@@ -1,17 +1,23 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RotateCcw } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { useToast } from './Toast';
 import { RoleSelector } from './RoleSelector';
 import { ThemePopover } from './ThemePopover';
 import { Breadcrumbs } from './Breadcrumbs';
 
 export function Header() {
+  const navigate = useNavigate();
   const { resetDemoData } = useApp();
+  const { showToast } = useToast();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleReset = () => {
     resetDemoData();
     setShowResetConfirm(false);
+    showToast('success', 'Demo data reset', 'All decision runs cleared and defaults restored.');
+    navigate('/claims');
   };
 
   return (

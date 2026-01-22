@@ -2,13 +2,15 @@ import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, AlertTriangle, Info } from 'lucide-react';
 import { WizardStepper, WizardStep } from '@/components/wizard/WizardStepper';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { useToast } from '@/components/shared/Toast';
 import {
   getClaimById,
   getApprovedInterpretationSet,
   getApprovedAssumptionSet,
 } from '@/data';
 import { useApp } from '@/context/AppContext';
-import { formatDate, cn } from '@/lib/utils';
+import { formatDate, cn, formatCHF } from '@/lib/utils';
 import { runDecision } from '@/services/decisionEngine';
 import type {
   Claim,
@@ -35,7 +37,8 @@ interface AssumptionResolution {
 export function DecisionWizardPage() {
   const { claimId } = useParams<{ claimId: string }>();
   const navigate = useNavigate();
-  const { currentRole, addDecisionRun } = useApp();
+  const { currentRole, addDecisionRun, publishedVersion } = useApp();
+  const { showToast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [resolutions, setResolutions] = useState<Map<string, AssumptionResolution>>(new Map());
   const [decisionRun, setDecisionRun] = useState<DecisionRun | null>(null);
@@ -150,6 +153,11 @@ export function DecisionWizardPage() {
 
     setDecisionRun(run);
     addDecisionRun(run);
+    showToast(
+      'success',
+      'Decision generated',
+      `${run.outcome.status}: ${formatCHF(run.outcome.payout_total)} payout`
+    );
   };
 
   const handleComplete = () => {
@@ -174,22 +182,27 @@ export function DecisionWizardPage() {
 
   if (!claim) {
     return (
-      <div>
-        <h1 className="mb-6 text-2xl font-semibold">Claim Not Found</h1>
-        <p className="text-muted-foreground">The claim "{claimId}" could not be found.</p>
-      </div>
+      <ErrorState
+        type="not-found"
+        title="Claim Not Found"
+        message={`The claim "${claimId}" could not be found in the system.`}
+        details="The claim ID may be incorrect, or the claim may have been removed."
+        actionLabel="Back to Claims"
+        actionHref="/claims"
+      />
     );
   }
 
   if (!interpretationSet || !assumptionSet) {
     return (
-      <div>
-        <h1 className="mb-6 text-2xl font-semibold">Configuration Error</h1>
-        <p className="text-muted-foreground">
-          No approved interpretation or assumption set found for {claim.jurisdiction} /{' '}
-          {claim.product_line}.
-        </p>
-      </div>
+      <ErrorState
+        type="config-error"
+        title="Configuration Error"
+        message={`No approved governance sets found for ${claim.jurisdiction} / ${claim.product_line}.`}
+        details="An approved Interpretation Set and Assumption Set are required to run decisions. Contact your administrator to configure governance for this jurisdiction and product line."
+        actionLabel="Back to Claim"
+        actionHref={`/claims/${claimId}`}
+      />
     );
   }
 
@@ -233,6 +246,7 @@ export function DecisionWizardPage() {
             interpretationSet={interpretationSet}
             assumptionSet={assumptionSet}
             triggeredAssumptions={triggeredAssumptions}
+            publishedVersion={publishedVersion}
           />
         )}
         {currentStep === 1 && (
@@ -285,11 +299,19 @@ export function DecisionWizardPage() {
 }
 
 // Setup Step Component
+interface PublishedVersionInfo {
+  proposalId: string;
+  proposalType: 'Assumption' | 'Interpretation';
+  version: string;
+  publishedAt: string;
+}
+
 interface SetupStepProps {
   claim: Claim;
   interpretationSet: InterpretationSet;
   assumptionSet: AssumptionSet;
   triggeredAssumptions: Assumption[];
+  publishedVersion: PublishedVersionInfo | null;
 }
 
 function SetupStep({
@@ -297,9 +319,26 @@ function SetupStep({
   interpretationSet,
   assumptionSet,
   triggeredAssumptions,
+  publishedVersion,
 }: SetupStepProps) {
   return (
     <div className="space-y-6">
+      {/* Published Version Banner */}
+      {publishedVersion && (
+        <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950/20">
+          <Check className="h-5 w-5 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <h4 className="font-medium text-green-800 dark:text-green-200">
+              New {publishedVersion.proposalType} Version Active
+            </h4>
+            <p className="text-sm text-green-700 dark:text-green-300 mt-1">
+              Version <span className="font-semibold">{publishedVersion.version}</span> was just published.
+              This decision will use the newly published defaults.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div>
         <h2 className="text-lg font-semibold mb-4">Governance Context</h2>
         <p className="text-sm text-muted-foreground mb-4">

@@ -215,53 +215,383 @@ describe('runDecision', () => {
     });
   });
 
-  describe('stub behavior', () => {
-    it('returns Denied status in stub implementation', () => {
+  describe('base coverage behavior (S2.7b)', () => {
+    it('covers repair items and applies deductible', () => {
       const input = createTestInput();
       const output = runDecision(input);
 
-      expect(output.outcome.status).toBe('Denied');
+      // mockClaim has repair (2500) + accessory (1200)
+      // Only repair covered: 2500 - 500 deductible = 2000
+      expect(output.outcome.payout_total).toBe(2000);
+      expect(output.outcome.status).toBe('Partial'); // 1/2 items covered
       expect(output.outcome.approved).toBe(false);
     });
 
-    it('returns zero payout in stub implementation', () => {
-      const input = createTestInput();
-      const output = runDecision(input);
-
-      expect(output.outcome.payout_total).toBe(0);
-    });
-
-    it('applies CH_MOTOR_DEDUCTIBLE in stub implementation', () => {
+    it('applies CH_MOTOR_DEDUCTIBLE', () => {
       const input = createTestInput();
       const output = runDecision(input);
 
       expect(output.outcome.deductible_applied).toBe(500);
     });
+
+    it('includes repair items in payout_breakdown', () => {
+      const input = createTestInput();
+      const output = runDecision(input);
+
+      expect(output.outcome.payout_breakdown).toHaveLength(1);
+      expect(output.outcome.payout_breakdown[0].label).toBe('Rear bumper repair');
+      expect(output.outcome.payout_breakdown[0].covered_amount).toBe(2500);
+    });
   });
 });
 
-// Placeholder tests for future stories (S2.7b/c/d)
-describe('S2.7b: Line item coverage logic', () => {
-  it.todo('covers base repair items always');
-  it.todo('covers accessory items when interpretation is INCLUDED_BY_DEFAULT');
-  it.todo('covers accessory items when INCLUDED_IF_DECLARED and assumption is DECLARED');
-  it.todo('excludes accessory items when INCLUDED_IF_DECLARED and assumption is NOT_DECLARED');
-  it.todo('excludes accessory items when interpretation is EXCLUDED');
+describe('S2.7c: Accessory coverage with interpretation/assumption', () => {
+  it('covers accessory items when interpretation is INCLUDED_BY_DEFAULT', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_BY_DEFAULT' },
+    ];
+    // Assumption doesn't matter for INCLUDED_BY_DEFAULT
+    input.resolvedAssumptions = [];
+
+    const output = runDecision(input);
+
+    // Both repair (2500) and accessory (1200) covered: 3700 - 500 = 3200
+    expect(output.outcome.payout_total).toBe(3200);
+    expect(output.outcome.status).toBe('Approved');
+    expect(output.outcome.approved).toBe(true);
+    expect(output.outcome.payout_breakdown).toHaveLength(2);
+  });
+
+  it('covers accessory items when INCLUDED_IF_DECLARED and assumption is DECLARED', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'DECLARED',
+        chosen_by_role: 'Supervisor',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    // Both repair (2500) and accessory (1200) covered: 3700 - 500 = 3200
+    expect(output.outcome.payout_total).toBe(3200);
+    expect(output.outcome.status).toBe('Approved');
+    expect(output.outcome.approved).toBe(true);
+    expect(output.outcome.payout_breakdown).toHaveLength(2);
+
+    // Check that accessory is in breakdown
+    const accessoryItem = output.outcome.payout_breakdown.find(
+      (item) => item.label === 'Tow bar replacement'
+    );
+    expect(accessoryItem).toBeDefined();
+    expect(accessoryItem?.covered_amount).toBe(1200);
+  });
+
+  it('excludes accessory items when INCLUDED_IF_DECLARED and assumption is NOT_DECLARED', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'NOT_DECLARED',
+        chosen_by_role: 'Adjuster',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    // Only repair (2500) covered: 2500 - 500 = 2000
+    expect(output.outcome.payout_total).toBe(2000);
+    expect(output.outcome.status).toBe('Partial');
+    expect(output.outcome.approved).toBe(false);
+    expect(output.outcome.payout_breakdown).toHaveLength(1);
+    expect(output.outcome.payout_breakdown[0].label).toBe('Rear bumper repair');
+  });
+
+  it('excludes accessory items when interpretation is EXCLUDED', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'EXCLUDED' },
+    ];
+    // Assumption doesn't matter for EXCLUDED
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'DECLARED',
+        chosen_by_role: 'Supervisor',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    // Only repair (2500) covered: 2500 - 500 = 2000
+    expect(output.outcome.payout_total).toBe(2000);
+    expect(output.outcome.status).toBe('Partial');
+    expect(output.outcome.approved).toBe(false);
+    expect(output.outcome.payout_breakdown).toHaveLength(1);
+  });
+
+  it('covers all items including multiple accessories when INCLUDED_BY_DEFAULT', () => {
+    const input = createTestInput();
+    input.claim = {
+      ...mockClaim,
+      line_items: [
+        { item_id: 'LI-001', label: 'Bumper repair', amount_chf: 2500, category: 'repair' },
+        { item_id: 'LI-002', label: 'Tow bar', amount_chf: 1200, category: 'accessory' },
+        { item_id: 'LI-003', label: 'Roof rack', amount_chf: 800, category: 'accessory' },
+      ],
+    };
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_BY_DEFAULT' },
+    ];
+
+    const output = runDecision(input);
+
+    // All items: 2500 + 1200 + 800 = 4500 - 500 = 4000
+    expect(output.outcome.payout_total).toBe(4000);
+    expect(output.outcome.status).toBe('Approved');
+    expect(output.outcome.payout_breakdown).toHaveLength(3);
+  });
+
+  it('handles claim with no accessory items', () => {
+    const input = createTestInput();
+    input.claim = {
+      ...mockClaim,
+      line_items: [
+        { item_id: 'LI-001', label: 'Bumper repair', amount_chf: 2500, category: 'repair' },
+        { item_id: 'LI-002', label: 'Paint work', amount_chf: 800, category: 'repair' },
+      ],
+    };
+    // Interpretation and assumption don't matter for repair-only claims
+    input.selectedInterpretations = [];
+    input.resolvedAssumptions = [];
+
+    const output = runDecision(input);
+
+    // All repair: 2500 + 800 = 3300 - 500 = 2800
+    expect(output.outcome.payout_total).toBe(2800);
+    expect(output.outcome.status).toBe('Approved');
+    expect(output.outcome.payout_breakdown).toHaveLength(2);
+  });
+
+  it('calculates correct delta between DECLARED and NOT_DECLARED scenarios', () => {
+    const baseInput = createTestInput();
+    baseInput.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+
+    // Scenario 1: NOT_DECLARED
+    const notDeclaredInput = { ...baseInput };
+    notDeclaredInput.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'NOT_DECLARED',
+        chosen_by_role: 'Adjuster',
+      },
+    ];
+    const notDeclaredOutput = runDecision(notDeclaredInput);
+
+    // Scenario 2: DECLARED
+    const declaredInput = { ...baseInput };
+    declaredInput.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'DECLARED',
+        chosen_by_role: 'Supervisor',
+      },
+    ];
+    const declaredOutput = runDecision(declaredInput);
+
+    // Delta should be the accessory amount (1200)
+    const delta = declaredOutput.outcome.payout_total - notDeclaredOutput.outcome.payout_total;
+    expect(delta).toBe(1200);
+  });
 });
 
-describe('S2.7c: Payout calculation', () => {
-  it.todo('calculates correct payout_total from covered items');
-  it.todo('applies deductible correctly');
-  it.todo('never returns negative payout');
-  it.todo('sets status to Approved when payout > 0');
-  it.todo('sets status to Denied when payout = 0');
-  it.todo('sets status to Partial when some items excluded');
-});
+describe('S2.7d: Enhanced trace generation', () => {
+  it('includes fact evaluation step with evidence_refs', () => {
+    const input = createTestInput();
+    const output = runDecision(input);
 
-describe('S2.7d: Trace generation', () => {
-  it.todo('generates sequential step numbers');
-  it.todo('includes all decision points in trace');
-  it.todo('references correct inputs in each step');
-  it.todo('records final payout calculation step');
-  it.todo('includes evidence_refs for relevant steps');
+    const factStep = output.traceSteps.find((s) => s.label === 'Evaluate Claim Facts');
+    expect(factStep).toBeDefined();
+    expect(factStep?.step_number).toBe(1);
+    expect(factStep?.inputs_used).toContain('FACT.ACCESSORY_DECLARED');
+    expect(factStep?.rule_refs).toContain('RULE.FACT_EVALUATION');
+    // evidence_refs populated from claim evidence
+    expect(Array.isArray(factStep?.evidence_refs)).toBe(true);
+  });
+
+  it('includes assumption resolution steps in trace when assumptions are resolved', () => {
+    const input = createTestInput();
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'NOT_DECLARED',
+        chosen_by_role: 'Adjuster',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    const assumptionStep = output.traceSteps.find((s) => s.label.includes('Apply Assumption'));
+    expect(assumptionStep).toBeDefined();
+    expect(assumptionStep?.label).toBe('Apply Assumption: Accessory Declared');
+    expect(assumptionStep?.inputs_used).toContain('ASM.ACCESSORY_DECLARED');
+    expect(assumptionStep?.inputs_used).toContain('FACT.ACCESSORY_DECLARED');
+    expect(assumptionStep?.output).toContain('NOT_DECLARED');
+    expect(assumptionStep?.output).toContain('Adjuster');
+    expect(assumptionStep?.rule_refs).toContain('RULE.ASSUMPTION.ASM.ACCESSORY_DECLARED');
+  });
+
+  it('includes interpretation application step when interpretation is selected', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+
+    const output = runDecision(input);
+
+    const interpretationStep = output.traceSteps.find((s) => s.label === 'Apply Accessory Coverage Policy');
+    expect(interpretationStep).toBeDefined();
+    expect(interpretationStep?.inputs_used).toContain('DP.ACCESSORY_COVERAGE');
+    expect(interpretationStep?.output_value).toBe('INCLUDED_IF_DECLARED');
+    expect(interpretationStep?.rule_refs).toContain('RULE.INTERPRETATION.DP.ACCESSORY_COVERAGE');
+  });
+
+  it('includes line item coverage evaluation step', () => {
+    const input = createTestInput();
+    const output = runDecision(input);
+
+    const coverageStep = output.traceSteps.find((s) => s.label === 'Evaluate Line Item Coverage');
+    expect(coverageStep).toBeDefined();
+    expect(coverageStep?.inputs_used).toContain('LI-001');
+    expect(coverageStep?.inputs_used).toContain('LI-002');
+    expect(coverageStep?.rule_refs).toContain('RULE.BASE_COVERAGE');
+  });
+
+  it('generates correct trace for full demo scenario (INCLUDED_IF_DECLARED + NOT_DECLARED)', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'NOT_DECLARED',
+        chosen_by_role: 'Adjuster',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    // Should have 7 steps: facts, assumption, interpretation, line items, gross, deductible, outcome
+    expect(output.traceSteps.length).toBe(7);
+
+    // Verify step ordering
+    expect(output.traceSteps[0].label).toBe('Evaluate Claim Facts');
+    expect(output.traceSteps[1].label).toBe('Apply Assumption: Accessory Declared');
+    expect(output.traceSteps[2].label).toBe('Apply Accessory Coverage Policy');
+    expect(output.traceSteps[3].label).toBe('Evaluate Line Item Coverage');
+    expect(output.traceSteps[4].label).toBe('Calculate Gross Payout');
+    expect(output.traceSteps[5].label).toBe('Apply Deductible');
+    expect(output.traceSteps[6].label).toBe('Determine Final Outcome');
+
+    // Verify final outcome reflects Partial status
+    expect(output.traceSteps[6].output).toContain('Partial');
+  });
+
+  it('generates correct trace for INCLUDED_BY_DEFAULT (no assumption needed)', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_BY_DEFAULT' },
+    ];
+    input.resolvedAssumptions = [];
+
+    const output = runDecision(input);
+
+    // Should have 6 steps: facts, interpretation, line items, gross, deductible, outcome (no assumption step)
+    expect(output.traceSteps.length).toBe(6);
+
+    // Verify no assumption step
+    const assumptionStep = output.traceSteps.find((s) => s.label.includes('Apply Assumption'));
+    expect(assumptionStep).toBeUndefined();
+
+    // Verify interpretation step shows INCLUDED_BY_DEFAULT
+    const interpretationStep = output.traceSteps.find((s) => s.label === 'Apply Accessory Coverage Policy');
+    expect(interpretationStep?.output).toContain('always covered');
+  });
+
+  it('generates correct trace for repair-only claims (no interpretation step)', () => {
+    const input = createTestInput();
+    input.claim = {
+      ...mockClaim,
+      line_items: [
+        { item_id: 'LI-001', label: 'Bumper repair', amount_chf: 2500, category: 'repair' },
+      ],
+    };
+    input.selectedInterpretations = [];
+    input.resolvedAssumptions = [];
+
+    const output = runDecision(input);
+
+    // Should have 5 steps: facts, line items, gross, deductible, outcome (no assumption or interpretation)
+    expect(output.traceSteps.length).toBe(5);
+
+    // Verify no interpretation step
+    const interpretationStep = output.traceSteps.find((s) => s.label === 'Apply Accessory Coverage Policy');
+    expect(interpretationStep).toBeUndefined();
+  });
+
+  it('trace steps have sequential step_numbers', () => {
+    const input = createTestInput();
+    input.selectedInterpretations = [
+      { decision_point_id: 'DP.ACCESSORY_COVERAGE', option: 'INCLUDED_IF_DECLARED' },
+    ];
+    input.resolvedAssumptions = [
+      {
+        assumption_id: 'ASM.ACCESSORY_DECLARED',
+        fact_id: 'FACT.ACCESSORY_DECLARED',
+        fact_label: 'Accessory Declared',
+        chosen_resolution: 'NOT_DECLARED',
+        chosen_by_role: 'Adjuster',
+      },
+    ];
+
+    const output = runDecision(input);
+
+    for (let i = 0; i < output.traceSteps.length; i++) {
+      expect(output.traceSteps[i].step_number).toBe(i + 1);
+    }
+  });
+
+  it('trace step_ids follow STEP-XXX format', () => {
+    const input = createTestInput();
+    const output = runDecision(input);
+
+    for (const step of output.traceSteps) {
+      expect(step.step_id).toMatch(/^STEP-\d{3}$/);
+    }
+  });
 });

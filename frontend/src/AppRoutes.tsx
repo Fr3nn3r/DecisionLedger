@@ -9,6 +9,7 @@ import { DecisionRunsPage } from '@/pages/DecisionRunsPage';
 import { QAImpactPage } from '@/pages/QAImpactPage';
 import { GovernancePage } from '@/pages/GovernancePage';
 import { ProposalDetailPage } from '@/pages/ProposalDetailPage';
+import { NewProposalPage } from '@/pages/NewProposalPage';
 import { CatalogsPage } from '@/pages/CatalogsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
@@ -34,6 +35,7 @@ export function AppRoutes() {
 
       {/* Governance */}
       <Route path="/governance" element={<GovernancePage />} />
+      <Route path="/governance/new" element={<NewProposalPage />} />
       <Route path="/governance/:proposalId" element={<ProposalDetailPage />} />
 
       {/* Catalogs */}

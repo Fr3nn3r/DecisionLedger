@@ -1,18 +1,17 @@
-import { Link } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { ErrorState } from '@/components/shared/ErrorState';
 
 export function NotFoundPage() {
+  const location = useLocation();
+
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center">
-      <h1 className="mb-2 text-4xl font-bold">404</h1>
-      <p className="mb-6 text-lg text-muted-foreground">Page not found</p>
-      <Link
-        to="/"
-        className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-      >
-        <Home className="h-4 w-4" />
-        Go to Home
-      </Link>
-    </div>
+    <ErrorState
+      type="not-found"
+      title="404 - Page Not Found"
+      message={`The page "${location.pathname}" doesn't exist or has been moved.`}
+      details="Check the URL for typos, or navigate back to the home page."
+      actionLabel="Go to Claims"
+      actionHref="/claims"
+    />
   );
 }

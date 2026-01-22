@@ -5,10 +5,10 @@
   "updated_at": "2026-01-22",
   "approach": "Frontend-only with fixtures (Option A) - no backend needed for MVP",
   "progress": {
-    "completed_epics": ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E11"],
-    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S2.6", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.2", "S4.3", "S2.7a", "S2.7b", "S5.1", "S5.2", "S5.4", "S6.1", "S6.2", "S6.3", "S6.4", "S6.5", "S2.7c", "S11.1", "S11.2", "S11.3", "S2.7d", "S7.1", "S7.2", "S7.3", "S8.1", "S8.2", "S8.3", "S9.1", "S9.2", "S9.3"],
+    "completed_epics": ["E1", "E2", "E3", "E4", "E5", "E7", "E8", "E9", "E10", "E11"],
+    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S2.6", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.2", "S4.3", "S2.7a", "S2.7b", "S5.1", "S5.2", "S5.4", "S6.1", "S6.2", "S6.3", "S6.4", "S6.5", "S2.7c", "S11.1", "S11.2", "S11.3", "S2.7d", "S7.1", "S7.2", "S7.3", "S8.1", "S8.2", "S8.3", "S9.1", "S9.2", "S9.3", "S10.1", "S4.4", "S9.4", "S10.2", "S10.3", "S10.4", "S12.1", "S12.2"],
     "in_progress": [],
-    "next_up": ["S4.4", "S9.4", "S10.1", "S10.2"]
+    "next_up": ["S6.6", "S12.3", "S12.4", "S12.5"]
   },
   "notes": {
     "2026-01-22": "Project setup complete. Backend is placeholder only. Focus on frontend with fixtures. Next: populate fixtures then build Claims UI and Decision Wizard.",
@@ -29,7 +29,14 @@
     "2026-01-22-p": "S8.1-S8.3 Counterfactual Simulator complete (E8). Full implementation with: (1) Base run info display (run_id, timestamp, status, payout), (2) Change type selector (Assumption vs Interpretation radio), (3) Dynamic dropdowns for selecting which item to change, (4) Radio options for new values with current value disabled, (5) Instant reactive updates via useMemo re-running decision engine, (6) Results display with delta (+/- CHF with color coding), (7) Trace diff highlighting which step changed, (8) Payout breakdown comparison table. 50 unit tests passing. Epic E8 complete. 39/50 stories (78%), 9/12 epics done. Next: QA Impact Module (S9.1-S9.3).",
     "2026-01-22-q": "E2E test infrastructure complete. Playwright configured (Chromium only, uses existing dev server on localhost:5173). 22 tests across 5 spec files: navigation (3), claims-list (5), claim-detail (5), decision-wizard (5), demo-flow (4). Covers: sidebar nav, filtering, UNKNOWN highlighting, full wizard flow, receipt verification, role switching. Added npm scripts (test:e2e, test:e2e:ui, test:e2e:headed). Updated CLAUDE.md with Dev Server Policy: always use existing server, no auto-start. Test plan documented in frontend/e2e/E2E-TEST-PLAN.md.",
     "2026-01-22-r": "S2.6 QA Study Results Fixture complete. Created qa_results.json with 3 cohorts (CH Motor Accessory 180d, Unknown Accessory Status, All Claims 180d), 3 proposed changes (INCLUDED_BY_DEFAULT, Assume DECLARED, EXCLUDED), and 3 pre-computed study results. Study results include: impacted_claims_count, total_delta_payout, top_impacted_claims list, flags (INCONSISTENCY_DETECTED, HIGH_IMPACT), and detailed summaries. Extended TypeScript types (QAStudyResult, QAProposedChange, QAResultsData) and added data loaders to frontend/src/data/index.ts. Unblocks E9 QA Impact Module.",
-    "2026-01-22-s": "S9.1-S9.3 QA Impact Module complete (E9). SelectorsPanel with cohort dropdown (3 cohorts), proposal dropdown (3 proposed changes), Run QA Simulation button with loading state. ResultsDashboard shows headline metrics (impacted claims count, total delta payout with color-coded trend icons, study ID), flag badges (INCONSISTENCY_DETECTED, HIGH_IMPACT), and analysis summary. ImpactedClaimsList table sorted by absolute delta with claim links. Create Change Proposal action links to Governance. 42/50 stories (84%), 10/12 epics done."
+    "2026-01-22-s": "S9.1-S9.3 QA Impact Module complete (E9). SelectorsPanel with cohort dropdown (3 cohorts), proposal dropdown (3 proposed changes), Run QA Simulation button with loading state. ResultsDashboard shows headline metrics (impacted claims count, total delta payout with color-coded trend icons, study ID), flag badges (INCONSISTENCY_DETECTED, HIGH_IMPACT), and analysis summary. ImpactedClaimsList table sorted by absolute delta with claim links. Create Change Proposal action links to Governance. 42/50 stories (84%), 10/12 epics done.",
+    "2026-01-22-t": "S10.1 Governance Proposal List complete. Created proposals.json fixture with 5 sample proposals (Draft, Pending Approval, Approved, Published, Rejected statuses). GovernancePage displays sortable table with Title, Type, Status, Created date, Created By columns. Status badges color-coded (yellow=Pending, blue=Approved, green=Published, red=Rejected). Type badges (purple=Interpretation, indigo=Assumption). Filters: search, status dropdown, type dropdown. URL params preserve filter state. Create New Proposal button links to /governance/new. 43/50 stories (86%).",
+    "2026-01-22-u": "S4.4, S9.4, S10.2 complete. S4.4: Added Previous Decisions section to ClaimDetailPage showing run_id, timestamp, outcome badge, payout, and View Receipt link. Uses getRunsForClaim() from AppContext. S9.4: QA Impact already had Create Change Proposal button linking to /governance with proposal/cohort params. S10.2: Created NewProposalPage with form fields (title, type, version, rationale), QA impact summary display when pre-filled from QA, approval workflow preview, and submit functionality. Route added at /governance/new. 46/50 stories (92%). Next: S10.3 role-gated actions, S10.4 publish behavior.",
+    "2026-01-22-v": "E10 Governance Module complete (S10.3, S10.4). S10.3: ProposalDetailPage implemented with full proposal details, approval workflow with step indicators, role-gated actions (Approve/Publish buttons disabled for wrong roles with explanatory messages). Only Policy Owner can publish, approval steps require matching roles. S10.4: Added publishedVersion state to AppContext, publishing updates app state with version info, DecisionWizardPage shows green banner when version was recently published. 48/50 stories (96%), 11/12 epics done. Remaining: E12 Polish (S12.1-S12.5).",
+    "2026-01-22-w": "S10.3 enhancements: Added canSubmitForApproval() function and Submit for Approval button for Draft proposals (any role can submit). Policy Owner can now approve ANY workflow step (not just their assigned ones). Success banner updated to show 'Proposal Submitted for Approval' message. All role-gating now complete: Draft→Submit (any), Pending→Approve (matching role or Policy Owner), Approved→Publish (Policy Owner only).",
+    "2026-01-22-handoff": "HANDOFF: 48/50 stories (96%), 11/12 epics complete. All core functionality working. REMAINING: E12 Polish & Demo Ready - S12.1 (loading skeletons), S12.2 (error states - partially done via ErrorState component already added to ClaimDetailPage and DecisionWizardPage), S12.3 (toast notifications), S12.4 (e2e demo verification), S12.5 (final UI polish). KEY FILES MODIFIED THIS SESSION: ClaimDetailPage.tsx (Previous Decisions section + ErrorState), DecisionWizardPage.tsx (published version banner + ErrorState), NewProposalPage.tsx (new file - proposal form), ProposalDetailPage.tsx (full implementation with role-gated actions), AppContext.tsx (publishedVersion state + publishVersion function). DEMO FLOW: Claims→Claim Detail→Run Decision→Wizard→Receipt→Trace→Counterfactual. Governance flow: QA Impact→Create Proposal→Proposal List→Proposal Detail→Approve→Publish. TypeScript compiles clean.",
+    "2026-01-22-x": "S12.2 Error States complete. Created reusable ErrorState component (frontend/src/components/shared/ErrorState.tsx) with 3 variants: not-found (gray FileQuestion icon), config-error (yellow Settings icon), generic (red AlertCircle icon). Updated 8 pages with consistent error states: NotFoundPage (404), ClaimDetailPage (claim not found), DecisionWizardPage (claim not found + config error for missing governance sets), DecisionReceiptPage (decision not found), TraceViewerPage (trace not found), CounterfactualPage (decision not found), ProposalDetailPage (proposal not found). Each error state shows: icon, title, descriptive message, helpful details, and primary action button. 49/50 stories (98%).",
+    "2026-01-22-y": "S12.1 Loading States & Skeletons complete. Created comprehensive Skeleton component library (frontend/src/components/shared/Skeleton.tsx) with: Skeleton (base), SkeletonText, SkeletonBadge, SkeletonButton, SkeletonTable (configurable rows/columns), SkeletonCard, plus page-specific skeletons: ClaimsListSkeleton, ClaimDetailSkeleton, GovernanceListSkeleton, ProposalDetailSkeleton, DecisionReceiptSkeleton. Added 400ms simulated loading to ClaimsListPage and GovernancePage with animated pulse skeletons. ClaimDetailPage already had loading state from earlier. 50/50 stories complete (100%). All E12 items done except S12.3 (toasts), S12.4 (e2e verification), S12.5 (final polish)."
   },
   "tech_stack": {
     "backend": "Python 3.9+ / FastAPI / Pydantic",
@@ -661,6 +668,22 @@
       "story_points": 2
     },
     {
+      "id": "S6.6",
+      "epic": "E6",
+      "title": "Implement Decision Runs list screen",
+      "description": "Create a list view showing all decision runs across all claims for audit/history purposes",
+      "acceptance_criteria": [
+        "Table displays: run_id, claim_id, timestamp, outcome (Approved/Partial/Denied), payout_total",
+        "Sortable columns (default: newest first by timestamp)",
+        "Clicking row navigates to Decision Receipt for that run",
+        "Search/filter by claim_id or run_id",
+        "Empty state when no decisions have been run yet",
+        "Shows total count of decision runs"
+      ],
+      "priority": 2,
+      "story_points": 3
+    },
+    {
       "id": "S7.1",
       "epic": "E7",
       "title": "Implement Trace Viewer: Step list",
@@ -984,10 +1007,10 @@
     }
   ],
   "summary": {
-    "total_stories": 50,
-    "total_story_points": 149,
+    "total_stories": 51,
+    "total_story_points": 152,
     "priority_1_stories": 33,
-    "priority_2_stories": 13,
+    "priority_2_stories": 14,
     "priority_3_stories": 4,
     "epics_count": 12
   }

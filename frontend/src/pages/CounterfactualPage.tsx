@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { CounterfactualSkeleton } from '@/components/shared/Skeleton';
 import {
   getClaimById,
   getInterpretationSetById,
@@ -12,6 +14,7 @@ import { ArrowLeft, GitBranch, ArrowUpRight, ArrowDownRight, Minus } from 'lucid
 import type {
   ChangeType,
   DecisionStatus,
+  DecisionRun,
   ResolvedAssumption,
   SelectedInterpretation,
   TraceStep,
@@ -84,6 +87,8 @@ function findTraceDiff(originalSteps: TraceStep[], newSteps: TraceStep[]): Trace
 export function CounterfactualPage() {
   const { runId } = useParams<{ runId: string }>();
   const { getDecisionRun } = useApp();
+  const [isLoading, setIsLoading] = useState(true);
+  const [baseRun, setBaseRun] = useState<DecisionRun | undefined>(undefined);
 
   // State for change selection
   const [changeType, setChangeType] = useState<ChangeType | null>(null);
@@ -92,8 +97,15 @@ export function CounterfactualPage() {
   const [selectedInterpretationId, setSelectedInterpretationId] = useState<string | null>(null);
   const [newInterpretationValue, setNewInterpretationValue] = useState<string | null>(null);
 
-  // Get the base decision run
-  const baseRun = runId ? getDecisionRun(runId) : undefined;
+  // Simulate loading delay for realistic UX
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setBaseRun(runId ? getDecisionRun(runId) : undefined);
+      setIsLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [runId, getDecisionRun]);
 
   // Get related data
   const claim = baseRun ? getClaimById(baseRun.claim_id) : undefined;
@@ -215,20 +227,20 @@ export function CounterfactualPage() {
     setNewInterpretationValue(null);
   };
 
+  if (isLoading) {
+    return <CounterfactualSkeleton />;
+  }
+
   if (!baseRun) {
     return (
-      <div>
-        <h1 className="mb-6 text-2xl font-semibold">Decision Not Found</h1>
-        <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
-          <p className="mb-4">The decision run "{runId}" could not be found.</p>
-          <p className="text-sm">
-            Decision runs are stored in memory and will be lost on page refresh.
-          </p>
-          <Link to="/claims" className="mt-4 inline-block text-primary hover:underline">
-            Return to Claims List
-          </Link>
-        </div>
-      </div>
+      <ErrorState
+        type="not-found"
+        title="Decision Not Found"
+        message={`The decision run "${runId}" could not be found.`}
+        details="Decision runs are stored in memory during your session. They will be lost on page refresh. Run a new decision from the claims page to use the counterfactual simulator."
+        actionLabel="Back to Claims"
+        actionHref="/claims"
+      />
     );
   }
 

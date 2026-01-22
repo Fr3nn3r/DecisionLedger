@@ -69,6 +69,18 @@ cd frontend && npx playwright test                         # E2E tests
 - **.claude/docs/** - Reference documentation for architecture, testing, workflows
 - Before `/clear`: Add handoff notes to backlog.json
 
+## Backlog Management
+
+**IMPORTANT**: Always update `.project/backlog.json` when a story is completed:
+
+1. Add the story ID to `progress.completed_stories` array
+2. Remove it from `progress.next_up` if present
+3. Add a dated note describing what was done (e.g., `"2026-01-22-z": "S12.1 complete. Details..."`)
+4. Update epic status in `progress.completed_epics` if all stories in an epic are done
+5. Update story counts in notes if relevant
+
+This ensures continuity across sessions and clear progress tracking.
+
 ## Key Paths
 
 - Backend: `backend/src/decision_ledger/`

@@ -1,5 +1,13 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
-import type { DecisionRun, Role } from '@/types';
+import type { DecisionRun, Role, ProposalType } from '@/types';
+
+// Represents a published version override
+interface PublishedVersion {
+  proposalId: string;
+  proposalType: ProposalType;
+  version: string;
+  publishedAt: string;
+}
 
 interface AppContextType {
   // Role management
@@ -11,6 +19,10 @@ interface AppContextType {
   addDecisionRun: (run: DecisionRun) => void;
   getDecisionRun: (runId: string) => DecisionRun | undefined;
   getRunsForClaim: (claimId: string) => DecisionRun[];
+
+  // Published version tracking (demo magic)
+  publishedVersion: PublishedVersion | null;
+  publishVersion: (proposalId: string, proposalType: ProposalType, version: string) => void;
 
   // Demo data reset
   resetDemoData: () => void;
@@ -25,6 +37,7 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   const [currentRole, setCurrentRole] = useState<Role>('Adjuster');
   const [decisionRuns, setDecisionRuns] = useState<DecisionRun[]>([]);
+  const [publishedVersion, setPublishedVersion] = useState<PublishedVersion | null>(null);
 
   const addDecisionRun = useCallback((run: DecisionRun) => {
     setDecisionRuns((prev) => [run, ...prev]);
@@ -44,9 +57,22 @@ export function AppProvider({ children }: AppProviderProps) {
     [decisionRuns]
   );
 
+  const publishVersion = useCallback(
+    (proposalId: string, proposalType: ProposalType, version: string) => {
+      setPublishedVersion({
+        proposalId,
+        proposalType,
+        version,
+        publishedAt: new Date().toISOString(),
+      });
+    },
+    []
+  );
+
   const resetDemoData = useCallback(() => {
     setDecisionRuns([]);
     setCurrentRole('Adjuster');
+    setPublishedVersion(null);
   }, []);
 
   return (
@@ -58,6 +84,8 @@ export function AppProvider({ children }: AppProviderProps) {
         addDecisionRun,
         getDecisionRun,
         getRunsForClaim,
+        publishedVersion,
+        publishVersion,
         resetDemoData,
       }}
     >

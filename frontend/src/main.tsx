@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { SpacemanThemeProvider, ThemeAnimationType } from '@space-man/react-theme-animation';
 import { AppProvider } from '@/context/AppContext';
+import { ToastProvider } from '@/components/shared/Toast';
 import App from './App';
 import './index.css';
 
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         duration={500}
       >
         <AppProvider>
-          <App />
+          <ToastProvider>
+            <App />
+          </ToastProvider>
         </AppProvider>
       </SpacemanThemeProvider>
     </BrowserRouter>

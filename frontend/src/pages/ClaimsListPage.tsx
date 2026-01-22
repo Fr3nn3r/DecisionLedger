@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getClaimSummaries } from '@/data';
+import { ClaimsListSkeleton } from '@/components/shared/Skeleton';
 import { formatDate, cn } from '@/lib/utils';
 import type { ClaimStatus, ClaimSummary } from '@/types';
 
@@ -72,9 +73,19 @@ function StatusBadge({ status }: { status: ClaimStatus }) {
 type ClaimSortKey = 'claim_id' | 'product_line' | 'loss_date' | 'status';
 
 export function ClaimsListPage() {
-  const claims = getClaimSummaries();
+  const [isLoading, setIsLoading] = useState(true);
+  const [claims, setClaims] = useState<ClaimSummary[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [sortConfig, setSortConfig] = useState<SortConfig<ClaimSortKey> | null>(null);
+
+  // Simulate initial data loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setClaims(getClaimSummaries());
+      setIsLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Get filter values from URL search params
   const jurisdictionFilter = searchParams.get(FILTER_KEYS.jurisdiction) || '';
@@ -159,6 +170,10 @@ export function ClaimsListPage() {
       return { key, direction: 'asc' };
     });
   };
+
+  if (isLoading) {
+    return <ClaimsListSkeleton />;
+  }
 
   return (
     <div>

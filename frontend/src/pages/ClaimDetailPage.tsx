@@ -1,8 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getClaimById } from '@/data';
+import { useApp } from '@/context/AppContext';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { ClaimDetailSkeleton } from '@/components/shared/Skeleton';
 import { formatDate, formatCHF, cn } from '@/lib/utils';
-import type { Fact, Evidence, LineItem, FactStatus } from '@/types';
+import type { Fact, Evidence, LineItem, FactStatus, DecisionStatus, Claim } from '@/types';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -62,6 +65,21 @@ function FactStatusBadge({ status }: { status: FactStatus }) {
   );
 }
 
+function DecisionStatusBadge({ status }: { status: DecisionStatus }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        status === 'Approved' && 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+        status === 'Partial' && 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+        status === 'Denied' && 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+      )}
+    >
+      {status}
+    </span>
+  );
+}
+
 function useSortableData<T, K extends string>(
   data: T[],
   getComparator: (key: K, direction: SortDirection) => (a: T, b: T) => number
@@ -95,7 +113,20 @@ type LineItemSortKey = 'label' | 'category' | 'amount_chf';
 
 export function ClaimDetailPage() {
   const { claimId } = useParams<{ claimId: string }>();
-  const claim = claimId ? getClaimById(claimId) : undefined;
+  const [isLoading, setIsLoading] = useState(true);
+  const [claim, setClaim] = useState<Claim | undefined>(undefined);
+  const { getRunsForClaim } = useApp();
+  const previousRuns = claimId ? getRunsForClaim(claimId) : [];
+
+  // Simulate loading delay for realistic UX
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setClaim(claimId ? getClaimById(claimId) : undefined);
+      setIsLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [claimId]);
 
   const factComparator = useMemo(
     () => (key: FactSortKey, direction: SortDirection) => (a: Fact, b: Fact) => {
@@ -147,17 +178,20 @@ export function ClaimDetailPage() {
     requestSort: requestLineItemSort,
   } = useSortableData<LineItem, LineItemSortKey>(claim?.line_items ?? [], lineItemComparator);
 
+  if (isLoading) {
+    return <ClaimDetailSkeleton />;
+  }
+
   if (!claim) {
     return (
-      <div>
-        <h1 className="mb-6 text-2xl font-semibold">Claim Not Found</h1>
-        <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
-          <p className="mb-4">The claim "{claimId}" could not be found.</p>
-          <Link to="/claims" className="text-primary hover:underline">
-            Return to Claims List
-          </Link>
-        </div>
-      </div>
+      <ErrorState
+        type="not-found"
+        title="Claim Not Found"
+        message={`The claim "${claimId}" could not be found in the system.`}
+        details="The claim ID may be incorrect, or the claim may have been removed."
+        actionLabel="Back to Claims"
+        actionHref="/claims"
+      />
     );
   }
 
@@ -174,7 +208,7 @@ export function ClaimDetailPage() {
           </p>
         </div>
         <Link
-          to={`/claims/${claim.claim_id}/decision`}
+          to={`/claims/${claim.claim_id}/decide`}
           className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
           Run Decision
@@ -361,6 +395,52 @@ export function ClaimDetailPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Previous Decisions Section */}
+      <div>
+        <h2 className="mb-3 text-lg font-medium">Previous Decisions</h2>
+        {previousRuns.length === 0 ? (
+          <div className="rounded-lg border border-border bg-card p-6 text-center text-muted-foreground">
+            No previous decisions for this claim.
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-lg border border-border">
+            <table className="w-full">
+              <thead className="bg-muted text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Run ID</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Timestamp</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Outcome</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium">Payout</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium"></th>
+                </tr>
+              </thead>
+              <tbody className="bg-card">
+                {previousRuns.map((run) => (
+                  <tr key={run.run_id} className="border-b border-border last:border-b-0">
+                    <td className="px-4 py-3 text-sm font-mono text-xs">{run.run_id}</td>
+                    <td className="px-4 py-3 text-sm">{formatDate(run.timestamp)}</td>
+                    <td className="px-4 py-3">
+                      <DecisionStatusBadge status={run.outcome.status} />
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm font-medium">
+                      {formatCHF(run.outcome.payout_total)}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        to={`/decision-runs/${run.run_id}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        View Receipt
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
