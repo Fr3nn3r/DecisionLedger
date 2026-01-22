@@ -5,10 +5,10 @@
   "updated_at": "2026-01-22",
   "approach": "Frontend-only with fixtures (Option A) - no backend needed for MVP",
   "progress": {
-    "completed_epics": ["E1", "E3"],
-    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.3", "S2.7a", "S5.1", "S5.2"],
+    "completed_epics": ["E1", "E3", "E5", "E6"],
+    "completed_stories": ["S1.1", "S1.2", "S1.3", "S1.4", "S2.1", "S2.2", "S2.3", "S2.4", "S2.5", "S3.1", "S3.2", "S3.3", "S3.4", "S3.5", "S3.6", "S3.7", "S4.1", "S4.3", "S2.7a", "S5.1", "S5.2", "S5.4", "S6.1", "S6.2", "S6.3", "S6.4", "S6.5"],
     "in_progress": [],
-    "next_up": ["S2.7b", "S2.7c", "S2.7d", "S6.1", "S6.2", "S6.3"]
+    "next_up": ["S2.7b", "S2.7c", "S2.7d", "S7.1", "S7.2", "S8.1"]
   },
   "notes": {
     "2026-01-22": "Project setup complete. Backend is placeholder only. Focus on frontend with fixtures. Next: populate fixtures then build Claims UI and Decision Wizard.",
@@ -16,7 +16,9 @@
     "2026-01-22-c": "S4.1 Claims List Page implemented. Table displays 10 demo claims with ID links, product line, formatted loss dates (de-CH locale), and status badges (Ready/Decided). Uses getClaimSummaries() and formatDate() utilities.",
     "2026-01-22-d": "S4.3 Claim Detail Page implemented. Shows header (claim_id, policy_id, jurisdiction, loss_date), facts table with UNKNOWN highlighting (yellow), evidence links, line items with category badges and totals. Run Decision CTA button. Also marking S2.3-S2.5 as completed (fixtures already existed).",
     "2026-01-22-e": "S2.7a Decision Engine Types and Core Structure completed. Created frontend/src/services/decisionEngine.ts with DecisionEngineInput/Output types, generateRunId() and runDecision() stub. Added Vitest configuration to vite.config.ts, test setup, and comprehensive test scaffolding (14 passing tests, 16 .todo() placeholders for S2.7b/c/d). Added jsdom dependency for testing.",
-    "2026-01-22-f": "S5.1 and S5.2 Decision Wizard implemented. Setup step shows governance context (interpretation/assumption sets with versions). Resolve Assumptions step displays triggered assumptions based on UNKNOWN facts, with radio selection, role-based restrictions, risk tier badges, and reason input for non-recommended selections. Complete step shows outcome summary. Wired to decision engine and AppContext."
+    "2026-01-22-f": "S5.1 and S5.2 Decision Wizard implemented. Setup step shows governance context (interpretation/assumption sets with versions). Resolve Assumptions step displays triggered assumptions based on UNKNOWN facts, with radio selection, role-based restrictions, risk tier badges, and reason input for non-recommended selections. Complete step shows outcome summary. Wired to decision engine and AppContext.",
+    "2026-01-22-g": "S6.1-S6.5 Decision Receipt implemented. Summary section with large status badge and payout breakdown table. Governance block with run ID, timestamp, role, interpretation/assumption set versions. Resolved assumptions section (yellow highlight) showing fact→resolution with chosen_by_role. Key decision steps preview (first 3 trace steps). Action buttons: View Trace, Simulate Alternative, Export PDF (stub). Epics E5 (Decision Wizard) and E6 (Decision Receipt) complete.",
+    "2026-01-22-h": "S5.4 Wizard Stepper UI implemented. Created WizardStepper component with horizontal step indicator showing Setup, Resolve Assumptions, Complete. Current step highlighted with primary color, completed steps show checkmark, clickable to navigate back. Centered layout with max-w-2xl constraint for balanced appearance."
   },
   "tech_stack": {
     "backend": "Python 3.9+ / FastAPI / Pydantic",
