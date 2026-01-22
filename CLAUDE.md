@@ -25,7 +25,23 @@ cd frontend && npx playwright test                         # E2E tests
 
 - Python: snake_case | TypeScript: camelCase | Classes: PascalCase
 - Test new/changed logic with PyTest or Vitest
-- Do not start/stop dev servers automatically - ask user first
+
+## Dev Server Policy
+
+**Always use the existing dev server** at `http://localhost:5173` for testing and verification.
+
+- Do NOT start new dev servers - assume one is already running
+- Do NOT stop or restart the dev server without asking the user first
+- E2E tests (Playwright) are configured to use the existing server
+- Side effects from testing are acceptable - the server runs latest code
+- If the server is not running, ask the user to start it
+
+## UI Best Practices
+
+- **Sortable table columns**: All data tables must have sortable columns. Click header to sort ascending, click again for descending, third click resets. Show sort indicator (▲/▼/⇅) on each sortable header.
+- **Status badges**: Use colored badges for status fields (Ready/Decided, KNOWN/UNKNOWN)
+- **Amounts**: Format currency with `formatCHF()`, dates with `formatDate()` (de-CH locale)
+- **UNKNOWN facts**: Highlight with yellow background row + yellow badge
 
 ## Versioning & Commits
 
