@@ -22,7 +22,7 @@ export function Sidebar() {
     <aside className="flex w-64 flex-col border-r border-sidebar-border bg-sidebar">
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
-        <img src={trueaimLogo} alt="TrueAim" className="h-8 w-auto" />
+        <img src={trueaimLogo} alt="TrueAim" className="h-8 w-auto dark:brightness-0 dark:invert" />
         <span className="text-lg font-semibold text-sidebar-foreground">
           Decision Ledger
         </span>
