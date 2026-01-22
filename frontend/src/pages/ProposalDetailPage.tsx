@@ -190,6 +190,7 @@ export function ProposalDetailPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setActionSuccess('submitted');
+      showToast('success', 'Proposal submitted', 'The proposal is now pending approval.');
     }, 1000);
   };
 
@@ -199,6 +200,7 @@ export function ProposalDetailPage() {
     setTimeout(() => {
       setIsApproving(false);
       setActionSuccess('approved');
+      showToast('success', 'Step approved', 'The proposal has moved to the next approval step.');
     }, 1000);
   };
 
@@ -210,6 +212,7 @@ export function ProposalDetailPage() {
       publishVersion(proposal.proposal_id, proposal.proposal_type, proposal.proposed_version);
       setIsPublishing(false);
       setActionSuccess('published');
+      showToast('success', `Version ${proposal.proposed_version} published`, 'New decisions will use the published version.');
     }, 1000);
   };
 
