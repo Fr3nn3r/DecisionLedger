@@ -1,0 +1,517 @@
+[
+  {
+    "run_id": "RUN-2025-11-28-001",
+    "claim_id": "CLM-CH-002",
+    "timestamp": "2025-11-29T10:15:00Z",
+    "interpretation_set_id": "INT-SET-CH-MOTOR-001",
+    "interpretation_set_version": "2025.1",
+    "assumption_set_id": "ASM-SET-CH-MOTOR-001",
+    "assumption_set_version": "2025.1",
+    "resolved_assumptions": [],
+    "selected_interpretations": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "option": "INCLUDED_IF_DECLARED"
+      }
+    ],
+    "outcome": {
+      "approved": true,
+      "status": "Approved",
+      "payout_total": 3150,
+      "payout_breakdown": [
+        {
+          "item_id": "LI-003",
+          "label": "Door panel replacement",
+          "covered_amount": 3200,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "LI-004",
+          "label": "Side mirror replacement",
+          "covered_amount": 450,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "DEDUCTIBLE",
+          "label": "Standard Deductible",
+          "covered_amount": -500,
+          "notes": "CHF 500 deductible applied"
+        }
+      ],
+      "deductible_applied": 500
+    },
+    "trace_steps": [
+      {
+        "step_id": "STEP-1",
+        "step_number": 1,
+        "label": "Evaluate Claim Facts",
+        "description": "Assessed all claim facts for decision-making",
+        "inputs_used": ["FACT.VEHICLE_TYPE", "FACT.COLLISION_TYPE", "FACT.DRIVER_AT_FAULT", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.FACT_EVALUATION"],
+        "evidence_refs": ["EV-004", "EV-005"],
+        "output": "All facts are KNOWN - no assumptions required"
+      },
+      {
+        "step_id": "STEP-2",
+        "step_number": 2,
+        "label": "Apply Interpretation: Accessory Coverage",
+        "description": "Applied ACCESSORY_COVERAGE interpretation",
+        "inputs_used": ["DP.ACCESSORY_COVERAGE"],
+        "rule_refs": ["RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": [],
+        "output": "INCLUDED_IF_DECLARED: Accessories covered if declared on policy"
+      },
+      {
+        "step_id": "STEP-3",
+        "step_number": 3,
+        "label": "Evaluate Line Item Coverage",
+        "description": "Determined coverage for each line item",
+        "inputs_used": ["LI-003", "LI-004"],
+        "rule_refs": ["RULE.REPAIR_COVERAGE"],
+        "evidence_refs": ["EV-005"],
+        "output": "All repair items covered"
+      },
+      {
+        "step_id": "STEP-4",
+        "step_number": 4,
+        "label": "Calculate Gross Payout",
+        "description": "Summed all covered line items",
+        "inputs_used": ["LI-003", "LI-004"],
+        "rule_refs": ["RULE.PAYOUT_CALCULATION"],
+        "evidence_refs": [],
+        "output": "Gross payout: CHF 3,650"
+      },
+      {
+        "step_id": "STEP-5",
+        "step_number": 5,
+        "label": "Apply Deductible",
+        "description": "Applied standard deductible",
+        "inputs_used": ["DEDUCTIBLE.STANDARD"],
+        "rule_refs": ["RULE.DEDUCTIBLE"],
+        "evidence_refs": [],
+        "output": "Deductible: CHF 500"
+      },
+      {
+        "step_id": "STEP-6",
+        "step_number": 6,
+        "label": "Determine Final Outcome",
+        "description": "Calculated final payout and status",
+        "inputs_used": [],
+        "rule_refs": ["RULE.OUTCOME_DETERMINATION"],
+        "evidence_refs": [],
+        "output": "Approved - Final payout: CHF 3,150"
+      }
+    ],
+    "generated_by_role": "Adjuster"
+  },
+  {
+    "run_id": "RUN-2025-10-16-001",
+    "claim_id": "CLM-CH-004",
+    "timestamp": "2025-10-16T14:30:00Z",
+    "interpretation_set_id": "INT-SET-CH-MOTOR-001",
+    "interpretation_set_version": "2025.1",
+    "assumption_set_id": "ASM-SET-CH-MOTOR-001",
+    "assumption_set_version": "2025.1",
+    "resolved_assumptions": [],
+    "selected_interpretations": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "option": "INCLUDED_IF_DECLARED"
+      }
+    ],
+    "outcome": {
+      "approved": true,
+      "status": "Approved",
+      "payout_total": 15300,
+      "payout_breakdown": [
+        {
+          "item_id": "LI-006",
+          "label": "Vehicle total loss payout",
+          "covered_amount": 15000,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "LI-007",
+          "label": "Roof rack system",
+          "covered_amount": 800,
+          "notes": "Accessory declared on policy - covered"
+        },
+        {
+          "item_id": "DEDUCTIBLE",
+          "label": "Standard Deductible",
+          "covered_amount": -500,
+          "notes": "CHF 500 deductible applied"
+        }
+      ],
+      "deductible_applied": 500
+    },
+    "trace_steps": [
+      {
+        "step_id": "STEP-1",
+        "step_number": 1,
+        "label": "Evaluate Claim Facts",
+        "description": "Assessed all claim facts for decision-making",
+        "inputs_used": ["FACT.VEHICLE_TYPE", "FACT.COLLISION_TYPE", "FACT.DRIVER_AT_FAULT", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.FACT_EVALUATION"],
+        "evidence_refs": ["EV-008", "EV-009"],
+        "output": "All facts are KNOWN - no assumptions required"
+      },
+      {
+        "step_id": "STEP-2",
+        "step_number": 2,
+        "label": "Apply Interpretation: Accessory Coverage",
+        "description": "Applied ACCESSORY_COVERAGE interpretation",
+        "inputs_used": ["DP.ACCESSORY_COVERAGE"],
+        "rule_refs": ["RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": [],
+        "output": "INCLUDED_IF_DECLARED: Accessories covered if declared on policy"
+      },
+      {
+        "step_id": "STEP-3",
+        "step_number": 3,
+        "label": "Evaluate Line Item Coverage",
+        "description": "Determined coverage for each line item",
+        "inputs_used": ["LI-006", "LI-007", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.REPAIR_COVERAGE", "RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": ["EV-009"],
+        "output": "All items covered (accessory declared = Yes)"
+      },
+      {
+        "step_id": "STEP-4",
+        "step_number": 4,
+        "label": "Calculate Gross Payout",
+        "description": "Summed all covered line items",
+        "inputs_used": ["LI-006", "LI-007"],
+        "rule_refs": ["RULE.PAYOUT_CALCULATION"],
+        "evidence_refs": [],
+        "output": "Gross payout: CHF 15,800"
+      },
+      {
+        "step_id": "STEP-5",
+        "step_number": 5,
+        "label": "Apply Deductible",
+        "description": "Applied standard deductible",
+        "inputs_used": ["DEDUCTIBLE.STANDARD"],
+        "rule_refs": ["RULE.DEDUCTIBLE"],
+        "evidence_refs": [],
+        "output": "Deductible: CHF 500"
+      },
+      {
+        "step_id": "STEP-6",
+        "step_number": 6,
+        "label": "Determine Final Outcome",
+        "description": "Calculated final payout and status",
+        "inputs_used": [],
+        "rule_refs": ["RULE.OUTCOME_DETERMINATION"],
+        "evidence_refs": [],
+        "output": "Approved - Final payout: CHF 15,300"
+      }
+    ],
+    "generated_by_role": "Adjuster"
+  },
+  {
+    "run_id": "RUN-2025-09-23-001",
+    "claim_id": "CLM-CH-006",
+    "timestamp": "2025-09-23T09:45:00Z",
+    "interpretation_set_id": "INT-SET-CH-MOTOR-001",
+    "interpretation_set_version": "2025.1",
+    "assumption_set_id": "ASM-SET-CH-MOTOR-001",
+    "assumption_set_version": "2025.1",
+    "resolved_assumptions": [],
+    "selected_interpretations": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "option": "INCLUDED_IF_DECLARED"
+      }
+    ],
+    "outcome": {
+      "approved": true,
+      "status": "Approved",
+      "payout_total": 350,
+      "payout_breakdown": [
+        {
+          "item_id": "LI-010",
+          "label": "Windshield replacement",
+          "covered_amount": 850,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "DEDUCTIBLE",
+          "label": "Standard Deductible",
+          "covered_amount": -500,
+          "notes": "CHF 500 deductible applied"
+        }
+      ],
+      "deductible_applied": 500
+    },
+    "trace_steps": [
+      {
+        "step_id": "STEP-1",
+        "step_number": 1,
+        "label": "Evaluate Claim Facts",
+        "description": "Assessed all claim facts for decision-making",
+        "inputs_used": ["FACT.VEHICLE_TYPE", "FACT.COLLISION_TYPE", "FACT.DRIVER_AT_FAULT", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.FACT_EVALUATION"],
+        "evidence_refs": ["EV-012", "EV-013"],
+        "output": "All facts are KNOWN - no assumptions required"
+      },
+      {
+        "step_id": "STEP-2",
+        "step_number": 2,
+        "label": "Evaluate Line Item Coverage",
+        "description": "Determined coverage for each line item",
+        "inputs_used": ["LI-010"],
+        "rule_refs": ["RULE.REPAIR_COVERAGE"],
+        "evidence_refs": ["EV-013"],
+        "output": "Windshield replacement covered"
+      },
+      {
+        "step_id": "STEP-3",
+        "step_number": 3,
+        "label": "Calculate Gross Payout",
+        "description": "Summed all covered line items",
+        "inputs_used": ["LI-010"],
+        "rule_refs": ["RULE.PAYOUT_CALCULATION"],
+        "evidence_refs": [],
+        "output": "Gross payout: CHF 850"
+      },
+      {
+        "step_id": "STEP-4",
+        "step_number": 4,
+        "label": "Apply Deductible",
+        "description": "Applied standard deductible",
+        "inputs_used": ["DEDUCTIBLE.STANDARD"],
+        "rule_refs": ["RULE.DEDUCTIBLE"],
+        "evidence_refs": [],
+        "output": "Deductible: CHF 500"
+      },
+      {
+        "step_id": "STEP-5",
+        "step_number": 5,
+        "label": "Determine Final Outcome",
+        "description": "Calculated final payout and status",
+        "inputs_used": [],
+        "rule_refs": ["RULE.OUTCOME_DETERMINATION"],
+        "evidence_refs": [],
+        "output": "Approved - Final payout: CHF 350"
+      }
+    ],
+    "generated_by_role": "Adjuster"
+  },
+  {
+    "run_id": "RUN-2025-08-31-001",
+    "claim_id": "CLM-CH-008",
+    "timestamp": "2025-08-31T16:20:00Z",
+    "interpretation_set_id": "INT-SET-CH-MOTOR-001",
+    "interpretation_set_version": "2025.1",
+    "assumption_set_id": "ASM-SET-CH-MOTOR-001",
+    "assumption_set_version": "2025.1",
+    "resolved_assumptions": [],
+    "selected_interpretations": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "option": "INCLUDED_IF_DECLARED"
+      }
+    ],
+    "outcome": {
+      "approved": true,
+      "status": "Approved",
+      "payout_total": 1400,
+      "payout_breakdown": [
+        {
+          "item_id": "LI-014",
+          "label": "Fairing replacement",
+          "covered_amount": 1500,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "LI-015",
+          "label": "Saddlebags",
+          "covered_amount": 400,
+          "notes": "Accessory declared on policy - covered"
+        },
+        {
+          "item_id": "DEDUCTIBLE",
+          "label": "Standard Deductible",
+          "covered_amount": -500,
+          "notes": "CHF 500 deductible applied"
+        }
+      ],
+      "deductible_applied": 500
+    },
+    "trace_steps": [
+      {
+        "step_id": "STEP-1",
+        "step_number": 1,
+        "label": "Evaluate Claim Facts",
+        "description": "Assessed all claim facts for decision-making",
+        "inputs_used": ["FACT.VEHICLE_TYPE", "FACT.COLLISION_TYPE", "FACT.DRIVER_AT_FAULT", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.FACT_EVALUATION"],
+        "evidence_refs": ["EV-016", "EV-017"],
+        "output": "All facts are KNOWN - no assumptions required"
+      },
+      {
+        "step_id": "STEP-2",
+        "step_number": 2,
+        "label": "Apply Interpretation: Accessory Coverage",
+        "description": "Applied ACCESSORY_COVERAGE interpretation",
+        "inputs_used": ["DP.ACCESSORY_COVERAGE"],
+        "rule_refs": ["RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": [],
+        "output": "INCLUDED_IF_DECLARED: Accessories covered if declared on policy"
+      },
+      {
+        "step_id": "STEP-3",
+        "step_number": 3,
+        "label": "Evaluate Line Item Coverage",
+        "description": "Determined coverage for each line item",
+        "inputs_used": ["LI-014", "LI-015", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.REPAIR_COVERAGE", "RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": ["EV-017"],
+        "output": "All items covered (accessory declared = Yes)"
+      },
+      {
+        "step_id": "STEP-4",
+        "step_number": 4,
+        "label": "Calculate Gross Payout",
+        "description": "Summed all covered line items",
+        "inputs_used": ["LI-014", "LI-015"],
+        "rule_refs": ["RULE.PAYOUT_CALCULATION"],
+        "evidence_refs": [],
+        "output": "Gross payout: CHF 1,900"
+      },
+      {
+        "step_id": "STEP-5",
+        "step_number": 5,
+        "label": "Apply Deductible",
+        "description": "Applied standard deductible",
+        "inputs_used": ["DEDUCTIBLE.STANDARD"],
+        "rule_refs": ["RULE.DEDUCTIBLE"],
+        "evidence_refs": [],
+        "output": "Deductible: CHF 500"
+      },
+      {
+        "step_id": "STEP-6",
+        "step_number": 6,
+        "label": "Determine Final Outcome",
+        "description": "Calculated final payout and status",
+        "inputs_used": [],
+        "rule_refs": ["RULE.OUTCOME_DETERMINATION"],
+        "evidence_refs": [],
+        "output": "Approved - Final payout: CHF 1,400"
+      }
+    ],
+    "generated_by_role": "Adjuster"
+  },
+  {
+    "run_id": "RUN-2025-10-06-001",
+    "claim_id": "CLM-CH-010",
+    "timestamp": "2025-10-06T11:00:00Z",
+    "interpretation_set_id": "INT-SET-CH-MOTOR-001",
+    "interpretation_set_version": "2025.1",
+    "assumption_set_id": "ASM-SET-CH-MOTOR-001",
+    "assumption_set_version": "2025.1",
+    "resolved_assumptions": [],
+    "selected_interpretations": [
+      {
+        "decision_point_id": "DP.ACCESSORY_COVERAGE",
+        "option": "INCLUDED_IF_DECLARED"
+      }
+    ],
+    "outcome": {
+      "approved": true,
+      "status": "Approved",
+      "payout_total": 5100,
+      "payout_breakdown": [
+        {
+          "item_id": "LI-017",
+          "label": "Interior damage repair",
+          "covered_amount": 3500,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "LI-018",
+          "label": "Steering column repair",
+          "covered_amount": 1200,
+          "notes": "Covered under base repair"
+        },
+        {
+          "item_id": "LI-019",
+          "label": "Premium audio system",
+          "covered_amount": 900,
+          "notes": "Accessory declared on policy - covered"
+        },
+        {
+          "item_id": "DEDUCTIBLE",
+          "label": "Standard Deductible",
+          "covered_amount": -500,
+          "notes": "CHF 500 deductible applied"
+        }
+      ],
+      "deductible_applied": 500
+    },
+    "trace_steps": [
+      {
+        "step_id": "STEP-1",
+        "step_number": 1,
+        "label": "Evaluate Claim Facts",
+        "description": "Assessed all claim facts for decision-making",
+        "inputs_used": ["FACT.VEHICLE_TYPE", "FACT.COLLISION_TYPE", "FACT.DRIVER_AT_FAULT", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.FACT_EVALUATION"],
+        "evidence_refs": ["EV-020", "EV-021", "EV-022"],
+        "output": "All facts are KNOWN - no assumptions required"
+      },
+      {
+        "step_id": "STEP-2",
+        "step_number": 2,
+        "label": "Apply Interpretation: Accessory Coverage",
+        "description": "Applied ACCESSORY_COVERAGE interpretation",
+        "inputs_used": ["DP.ACCESSORY_COVERAGE"],
+        "rule_refs": ["RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": [],
+        "output": "INCLUDED_IF_DECLARED: Accessories covered if declared on policy"
+      },
+      {
+        "step_id": "STEP-3",
+        "step_number": 3,
+        "label": "Evaluate Line Item Coverage",
+        "description": "Determined coverage for each line item",
+        "inputs_used": ["LI-017", "LI-018", "LI-019", "FACT.ACCESSORY_DECLARED"],
+        "rule_refs": ["RULE.REPAIR_COVERAGE", "RULE.ACCESSORY_COVERAGE"],
+        "evidence_refs": ["EV-022"],
+        "output": "All items covered (accessory declared = Yes)"
+      },
+      {
+        "step_id": "STEP-4",
+        "step_number": 4,
+        "label": "Calculate Gross Payout",
+        "description": "Summed all covered line items",
+        "inputs_used": ["LI-017", "LI-018", "LI-019"],
+        "rule_refs": ["RULE.PAYOUT_CALCULATION"],
+        "evidence_refs": [],
+        "output": "Gross payout: CHF 5,600"
+      },
+      {
+        "step_id": "STEP-5",
+        "step_number": 5,
+        "label": "Apply Deductible",
+        "description": "Applied standard deductible",
+        "inputs_used": ["DEDUCTIBLE.STANDARD"],
+        "rule_refs": ["RULE.DEDUCTIBLE"],
+        "evidence_refs": [],
+        "output": "Deductible: CHF 500"
+      },
+      {
+        "step_id": "STEP-6",
+        "step_number": 6,
+        "label": "Determine Final Outcome",
+        "description": "Calculated final payout and status",
+        "inputs_used": [],
+        "rule_refs": ["RULE.OUTCOME_DETERMINATION"],
+        "evidence_refs": [],
+        "output": "Approved - Final payout: CHF 5,100"
+      }
+    ],
+    "generated_by_role": "Adjuster"
+  }
+]
